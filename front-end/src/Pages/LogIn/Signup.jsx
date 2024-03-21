@@ -2,39 +2,40 @@ import log from "../../assests/log.png";
 import Button from "../../Components/Homepage/Button";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { validateInput } from "./validation.js";
+import axios from "axios";
 
 const Signup = () => {
   const [name, setName] = useState("");
-  const [emailOrPhoneNumber, setEmailOrPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState({});
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const account = { name, emailOrPhoneNumber, password };
+    const errors = validateInput(name, email, password);
 
+    if (Object.keys(errors).length > 0) {
+      setError(errors);
+      console.error(errors);
+      return;
+    }
+
+    const account = { name, email, password };
+    console.log("account:", account);
     try {
-      const response = await fetch("http://localhost:4000/api/accounts", {
-        method: "POST",
-        body: JSON.stringify(account),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const json = await response.json();
+      const response = await axios.post(
+        "http://localhost:4000/api/accounts",
+        account
+      );
+      setName("");
+      setEmail("");
+      setPassword("");
 
-      if (!response.ok) {
-        setError(json.error || "An error occurred");
-      } else {
-        console.log(name, emailOrPhoneNumber, password);
-        setName("");
-        setEmailOrPhoneNumber("");
-        setPassword("");
-        setError(null);
-        console.log("new account added", json);
-      }
+      console.log("new account added", response.data);
     } catch (error) {
-      setError("An error occurred");
+      console.log("error:", error);
     }
   };
   return (
@@ -57,38 +58,49 @@ const Signup = () => {
               <input
                 type="text"
                 placeholder="Name"
-                className="text-xl mt-20"
+                className="text-xl mt-20 border-none w-80 outline-none"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setError((prevErrors) => ({ ...prevErrors, name: null }));
+                }}
               />
               <hr className="my-2" />
+              {error.name && <p>{error.name}</p>}
               {/* Email or Phone Number */}
               <input
-                type="text"
-                placeholder="Email or Phone Number"
-                className="text-xl mt-10 border-non"
-                value={emailOrPhoneNumber}
-                onChange={(e) => setEmailOrPhoneNumber(e.target.value)}
+                type="email"
+                placeholder="Email"
+                className="text-xl mt-10 border-none w-80 outline-none"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setError((prevErrors) => ({ ...prevErrors, email: null }));
+                }}
               />
               <hr className="my-2" />
+              {error.email && <p>{error.email}</p>}
               {/* Password */}
               <input
-                type="text"
+                type="password"
                 placeholder="Password"
-                className="text-xl mt-10"
+                className="text-xl mt-10 border-none w-80 outline-none"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError((prevErrors) => ({ ...prevErrors, password: null }));
+                }}
               />
               <hr className="my-2" />
+              {error.password && <p>{error.password}</p>}
               <div className="mt-10">
                 <Button
                   title="Create Account"
                   height="3"
-                  width="full"
                   type="submit"
+                  width="24"
                 />
               </div>
-              {error && <div>{error}</div>}
             </form>
 
             {/* Google Sign Up */}

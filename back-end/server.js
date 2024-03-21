@@ -1,6 +1,7 @@
 require("dotenv").config();
 const mongoose = require("mongoose"); // import mongoose
 const express = require("express"); // import express
+const session = require("express-session"); // import express-session
 const userRoutes = require("./routes/user"); // import routes
 
 // express app
@@ -8,6 +9,16 @@ const app = express();
 const cors = require("cors");
 app.use(express.json());
 app.use(cors());
+
+// express session
+app.use(
+  session({
+    secret: "reagan123",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Note: secure should be set to true when in a production environment and the site is served over HTTPS
+  })
+);
 
 //routes
 app.use("/api/accounts", userRoutes);

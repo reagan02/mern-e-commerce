@@ -27,16 +27,23 @@ const getAccount = async (req, res) => {
 
 // create a new account
 const createAccount = async (req, res) => {
-  const { name, emailOrPhoneNumber, password } = req.body;
+  const { name, email, password } = req.body;
 
   // add new acc to db
   try {
-    const create = await Account.create({
+    const user = await Account.create({
       name,
-      emailOrPhoneNumber,
+      email,
       password,
     });
-    res.status(200).json({ create });
+
+    // If authentication is successful:
+    req.session.user = {
+      id: user._id, // The ID of the user
+      username: user.name, // The username of the user
+    };
+
+    res.status(200).json({ user });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -44,7 +51,7 @@ const createAccount = async (req, res) => {
 // update a workout
 const updateAccount = async (req, res) => {
   const { id } = req.params; // id of the account
-  const { name, emailOrPhoneNumber, password } = req.body; // new data
+  const { name, email, password } = req.body; // new data
 
   // check if the account is valid
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -53,7 +60,7 @@ const updateAccount = async (req, res) => {
   // find the account and update
   const account = await Account.findOneAndUpdate(
     { _id: id },
-    { name, emailOrPhoneNumber, password, _id: id },
+    { name, email, password, _id: id },
     { new: true }
   );
 
@@ -80,6 +87,15 @@ const deleteAccount = async (req, res) => {
   res.status(200).json({ account });
 };
 
+// check Session
+const checkSession = (req, res) => {
+  if (req.session.user) {
+    res.json({ user: req.session.user });
+  } else {
+    res.status(401).json({ error: "Unauthenticated" });
+  }
+};
+
 // export all the functions
 module.exports = {
   getAllAccount,
@@ -87,4 +103,5 @@ module.exports = {
   createAccount,
   deleteAccount,
   updateAccount,
+  checkSession,
 };

@@ -7,7 +7,7 @@ const createAccountSchema = new Schema(
       type: String,
       required: true,
     },
-    emailOrPhoneNumber: {
+    email: {
       type: String,
       required: true,
     },

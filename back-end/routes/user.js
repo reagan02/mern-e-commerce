@@ -5,6 +5,7 @@ const {
   getAllAccount,
   deleteAccount,
   updateAccount,
+  checkSession,
 } = require("../controller/userController");
 
 const router = express.Router();
@@ -23,5 +24,7 @@ router.delete("/:id", deleteAccount);
 
 //  update an account
 router.patch("/:id", updateAccount);
+
+router.get("/check-session", checkSession);
 
 module.exports = router;

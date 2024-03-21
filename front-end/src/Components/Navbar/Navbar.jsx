@@ -10,8 +10,26 @@ import {
   faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Navbar = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/accounts/check-session")
+      .then((response) => {
+        if (response.data.loggedIn) {
+          setLoggedIn(true);
+          console.log("Logged In");
+        }
+      })
+      .catch((error) => {
+        console.error("Error checking session:", error);
+      });
+  }, []);
+
   return (
     <div className="h-18 w-full flex border-b justify-between items-end pt-7 pb-4 bg-white lg:px-20 md:px-14 xs:px-10">
       {/* Company Name // Title */}
@@ -58,7 +76,7 @@ const Navbar = () => {
           <FontAwesomeIcon icon={faCartShopping} className="size-5 " />
 
           {/* Account Log Icon */}
-          <div className="hidden ">
+          <div className={loggedIn ? "" : "hidden"}>
             <a href="">
               <FontAwesomeIcon icon={faCircleUser} className="size-5" />
             </a>
