@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 const Button = (props) => {
   return (
-    <a href="">
+    <button>
       <div
         style={{ width: `${props.width}rem`, height: `${props.height}rem` }}
         className={`${props.bgColor} ${props.border} rounded-sm flex justify-center items-center`}
@@ -14,7 +14,7 @@ const Button = (props) => {
           {props.title}
         </p>
       </div>
-    </a>
+    </button>
   );
 };
 

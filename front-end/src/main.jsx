@@ -10,8 +10,8 @@ import {
 import Mainpage from "./Pages/Mainpage";
 import Homepage from "./Pages/Homepage";
 import Contact from "./Pages/Contact";
-import Login from "./Components/LogIn/Login";
-import Signup from "./Components/LogIn/Signup";
+import Login from "./Pages/LogIn/Login";
+import Signup from "./Pages/LogIn/Signup";
 import About from "./Pages/About";
 import Cart from "./Pages/Cart";
 import NotFound from "./Pages/NotFound";
