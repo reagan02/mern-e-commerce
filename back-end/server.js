@@ -2,7 +2,8 @@ require("dotenv").config();
 const mongoose = require("mongoose"); // import mongoose
 const express = require("express"); // import express
 const session = require("express-session"); // import express-session
-const userRoutes = require("./routes/user"); // import routes
+const userRoutes = require("./routes/userRoutes"); // import routes
+const productRoutes = require("./routes/productRoutes"); // import routes
 
 // express app
 const app = express();
@@ -22,6 +23,7 @@ app.use(
 
 //routes
 app.use("/api/accounts", userRoutes);
+app.use("/api/products", productRoutes);
 
 //Database Connection with mongoDB
 mongoose

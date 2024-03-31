@@ -1,7 +1,20 @@
+import { useEffect, useState } from "react";
 const Header = () => {
+  const [userName, setUserName] = useState(null);
+
+  useEffect(() => {
+    const storedUserName = sessionStorage.getItem("userName");
+    if (storedUserName) {
+      setUserName("Welcome " + storedUserName);
+    }
+  }, []);
   return (
     <div className="bg-black w-full flex xs:justify-center md:justify-between sm:items-center lg:px-20 lg:py-2 md:px-14 md:py-2 xs:px-10 xs:py-1 ">
-      <div></div>
+      <div className="text-white ">
+        <p className="lg:text-base md:text-sm sm:text-xs sm:block xs:hidden">
+          {userName}
+        </p>
+      </div>
       <div className="text-white ">
         <p className="lg:text-base md:text-sm sm:text-xs sm:block xs:hidden">
           Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%{" "}

@@ -6,6 +6,9 @@ const {
   deleteAccount,
   updateAccount,
   checkSession,
+  login,
+  logout,
+  addAddress,
 } = require("../controller/userController");
 
 const router = express.Router();
@@ -25,6 +28,16 @@ router.delete("/:id", deleteAccount);
 //  update an account
 router.patch("/:id", updateAccount);
 
-router.get("/check-session", checkSession);
+// check session
+router.get("/checkSession", checkSession);
+
+//login
+router.post("/login", login);
+
+// logout
+router.post("/logout", logout);
+
+// add address
+router.post("/:id/address", addAddress);
 
 module.exports = router;

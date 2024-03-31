@@ -1,5 +1,3 @@
-export const validation = () => {};
-
 export const validateInput = (name, email, password) => {
   const errors = {};
 
@@ -13,7 +11,7 @@ export const validateInput = (name, email, password) => {
       "Email is required and should be less than or equal to 32 characters.";
   }
 
-  if (!password || password.length > 32) {
+  if (!password || password.length > 32 || password.length < 6) {
     errors.password =
       "Password is required and should be less than or equal to 32 characters.";
   }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { validateInput } from "./validation.js";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -11,6 +12,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState({});
 
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -23,7 +25,7 @@ const Signup = () => {
     }
 
     const account = { name, email, password };
-    console.log("account:", account);
+
     try {
       const response = await axios.post(
         "http://localhost:4000/api/accounts",
@@ -34,8 +36,16 @@ const Signup = () => {
       setPassword("");
 
       console.log("new account added", response.data);
+      console.log(response.data); // { signup: true }
+      sessionStorage.setItem("userName", response.data.user.name);
+      navigate("/home");
+      window.location.reload();
     } catch (error) {
-      console.log("error:", error);
+      // Check if the error response has a status of 400 and log it
+      if (error.response && error.response.status === 400) {
+        console.log("Email is already in use");
+        setError({ email: error.response.data.error });
+      }
     }
   };
   return (
@@ -66,7 +76,10 @@ const Signup = () => {
                 }}
               />
               <hr className="my-2" />
-              {error.name && <p>{error.name}</p>}
+
+              {/* Display Name Error Message */}
+              {error.name && <p className="text-red-500">{error.name}</p>}
+
               {/* Email or Phone Number */}
               <input
                 type="email"
@@ -79,7 +92,10 @@ const Signup = () => {
                 }}
               />
               <hr className="my-2" />
-              {error.email && <p>{error.email}</p>}
+
+              {/* Display Email Error Message */}
+              {error.email && <p className="text-red-500">{error.email}</p>}
+
               {/* Password */}
               <input
                 type="password"
@@ -92,14 +108,16 @@ const Signup = () => {
                 }}
               />
               <hr className="my-2" />
-              {error.password && <p>{error.password}</p>}
+
+              {/* Display Password Error Message */}
+              {error.password && (
+                <p className="text-red-500">{error.password}</p>
+              )}
+
               <div className="mt-10">
-                <Button
-                  title="Create Account"
-                  height="3"
-                  type="submit"
-                  width="24"
-                />
+                <button type="submit">
+                  <Button title="Create Account" height="3" width="24" />
+                </button>
               </div>
             </form>
 

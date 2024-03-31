@@ -2,19 +2,17 @@ import PropTypes from "prop-types";
 
 const Button = (props) => {
   return (
-    <button>
-      <div
-        style={{ width: `${props.width}rem`, height: `${props.height}rem` }}
-        className={`${props.bgColor} ${props.border} rounded-sm flex justify-center items-center`}
+    <div
+      style={{ width: `${props.width}rem`, height: `${props.height}rem` }}
+      className={`${props.bgColor} ${props.border} rounded-sm flex justify-center items-center`}
+    >
+      <p
+        style={{ fontSize: `${props.textSize}rem` }}
+        className={`text-xl ${props.textColor} p-5`}
       >
-        <p
-          style={{ fontSize: `${props.textSize}rem` }}
-          className={`text-xl ${props.textColor} p-5`}
-        >
-          {props.title}
-        </p>
-      </div>
-    </button>
+        {props.title}
+      </p>
+    </div>
   );
 };
 

@@ -2,33 +2,32 @@ import log from "../../assests/log.png";
 import Button from "../../Components/Homepage/Button";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
-  const [emailOrPhoneNumber, setEmailOrPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const account = { email, password };
 
-  async function submit(e) {
+  const navigate = useNavigate();
+
+  // POST request to log in
+  const submit = async (e) => {
     e.preventDefault();
-    // Sending LOGIN POST request to the back end -> server
     try {
-      await axios
-        .post("http://localhost:4000/login", {
-          emailOrPhoneNumber,
-          password,
-        })
-        .then((res) => {
-          if (res.data == "Email or Phone Number already exists") {
-            console.log("Email or Phone Number already exists");
-          } else if (res.data == "Not Exist") {
-            console.log("Not Exist");
-          }
-        })
-        .catch((error) => {
-          alert(error);
-        });
+      const response = await axios.post(
+        "http://localhost:4000/api/accounts/login",
+        account
+      );
+      console.log(response.data); // { login: true }
+      console.log("login success");
+      sessionStorage.setItem("userName", response.data.user.name);
+      navigate("/home");
+      window.location.reload();
     } catch (error) {
-      console.log(error);
+      setError("Invalid Email or Password");
     }
-  }
+  };
   return (
     <div>
       <div className="flex my-10">
@@ -45,33 +44,35 @@ const Login = () => {
             <p className="text-xl ">Enter your details below</p>
 
             {/* POST FORM to log in */}
-            <form action="POST">
+            <form onSubmit={submit}>
               {/* Email or Phone Number */}
               <input
                 type="text"
                 placeholder="Email or Phone Number"
-                className="text-xl mt-20"
-                value={emailOrPhoneNumber}
-                onChange={(e) => setEmailOrPhoneNumber(e.target.value)}
+                className="text-xl mt-20 outline-none"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <hr className="my-2" />
+
               {/* Password */}
               <input
-                type="text"
+                type="password"
                 placeholder="Password"
-                className="text-xl mt-10"
+                className="text-xl mt-10 outline-none"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <hr className="my-2" />
+
+              {/* Display Email Error Message */}
+              {error && <p className="text-red-500">{error}</p>}
+
+              {/* Log In Button */}
               <div className="flex justify-between items-center mt-5">
-                <Button
-                  title="Log In"
-                  height="2.5"
-                  width="7"
-                  type="submit"
-                  onClick={submit}
-                />
+                <button type="submit">
+                  <Button title="Log In" height="2.5" width="7" />
+                </button>
                 <a href="" className="text-orange-600 text-base">
                   Forget Password?
                 </a>

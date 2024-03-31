@@ -9,27 +9,36 @@ import {
   faStar,
   faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
-import { NavLink } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import axios from "axios";
 
 const Navbar = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [click, setClick] = useState(false);
+  const handleSubmit = () => {
+    setClick(!click);
+  };
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:4000/api/accounts/check-session")
-      .then((response) => {
-        if (response.data.loggedIn) {
-          setLoggedIn(true);
-          console.log("Logged In");
-        }
-      })
-      .catch((error) => {
-        console.error("Error checking session:", error);
-      });
-  }, []);
+  const navigate = useNavigate();
 
+  const handleLogin = () => {
+    navigate("/login");
+    setClick(!click);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:4000/api/accounts/logout");
+      sessionStorage.removeItem("userName"); // Clear user data from local storage
+      console.log("Session destroyed");
+      setClick(!click);
+      navigate("/login");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error destroying session:", error);
+    }
+  };
+  const isUserLoggedIn = sessionStorage.getItem("userName") !== null;
   return (
     <div className="h-18 w-full flex border-b justify-between items-end pt-7 pb-4 bg-white lg:px-20 md:px-14 xs:px-10">
       {/* Company Name // Title */}
@@ -74,53 +83,73 @@ const Navbar = () => {
         <div className="flex items-center h-full gap-10">
           <FontAwesomeIcon icon={faHeart} className="size-5" />
           <FontAwesomeIcon icon={faCartShopping} className="size-5 " />
-
           {/* Account Log Icon */}
-          <div className={loggedIn ? "" : "hidden"}>
-            <a href="">
+          <div>
+            <button onClick={handleSubmit}>
               <FontAwesomeIcon icon={faCircleUser} className="size-5" />
-            </a>
-            <div className="absolute right-20 top-28 rounded-md text-white bg-slate-900 hidden ">
-              <a href="" className="">
-                <div className="my-3 px-5 flex items-center gap-4">
-                  <FontAwesomeIcon icon={faCircleUser} className="size-5" />
-                  <p className="text-base">Manage My Account</p>
+            </button>
+            {click &&
+              (isUserLoggedIn ? (
+                <div className="absolute right-20 top-28 rounded-md text-white bg-slate-900 ">
+                  <a href="" className="">
+                    <div className="my-3 px-5 flex items-center gap-4">
+                      <FontAwesomeIcon icon={faCircleUser} className="size-5" />
+                      <p className="text-base">Manage My Account</p>
+                    </div>
+                  </a>
+                  <a href="" className="">
+                    <div className="my-3 px-5 flex items-center gap-4">
+                      <FontAwesomeIcon icon={faCircleUser} className="size-5" />
+                      <p className="text-base">My Order</p>
+                    </div>
+                  </a>
+                  <a href="" className="">
+                    <div className="my-3 px-5 flex items-center gap-4">
+                      <FontAwesomeIcon
+                        icon={faBagShopping}
+                        className="size-5"
+                      />
+                      <p className="text-base">My Order</p>
+                    </div>
+                  </a>
+                  <a href="" className="">
+                    <div className="my-3 px-5 flex items-center gap-4">
+                      <FontAwesomeIcon
+                        icon={faXmarkCircle}
+                        className="size-5"
+                      />
+                      <p className="text-base">My Cancellations</p>
+                    </div>
+                  </a>
+                  <a href="" className="">
+                    <div className="my-3 px-5 flex items-center gap-4">
+                      <FontAwesomeIcon icon={faStar} className="size-5" />
+                      <p className="text-base">My Reviews</p>
+                    </div>
+                  </a>
+                  <button onClick={handleLogout}>
+                    <div className="my-3 px-5 flex items-center gap-4">
+                      <FontAwesomeIcon
+                        icon={faArrowRightFromBracket}
+                        className="size-5"
+                      />
+                      <p className="text-base">Logout</p>
+                    </div>
+                  </button>
                 </div>
-              </a>
-              <a href="" className="">
-                <div className="my-3 px-5 flex items-center gap-4">
-                  <FontAwesomeIcon icon={faCircleUser} className="size-5" />
-                  <p className="text-base">My Order</p>
+              ) : (
+                <div className="absolute right-20 top-28 rounded-md text-white bg-slate-900">
+                  <button onClick={handleLogin}>
+                    <div className="my-3 px-5 flex items-center gap-4">
+                      <FontAwesomeIcon
+                        icon={faArrowRightFromBracket}
+                        className="size-5"
+                      />
+                      <p className="text-base">Login</p>
+                    </div>
+                  </button>
                 </div>
-              </a>
-              <a href="" className="">
-                <div className="my-3 px-5 flex items-center gap-4">
-                  <FontAwesomeIcon icon={faBagShopping} className="size-5" />
-                  <p className="text-base">My Order</p>
-                </div>
-              </a>
-              <a href="" className="">
-                <div className="my-3 px-5 flex items-center gap-4">
-                  <FontAwesomeIcon icon={faXmarkCircle} className="size-5" />
-                  <p className="text-base">My Cancellations</p>
-                </div>
-              </a>
-              <a href="" className="">
-                <div className="my-3 px-5 flex items-center gap-4">
-                  <FontAwesomeIcon icon={faStar} className="size-5" />
-                  <p className="text-base">My Reviews</p>
-                </div>
-              </a>
-              <a href="" className="">
-                <div className="my-3 px-5 flex items-center gap-4">
-                  <FontAwesomeIcon
-                    icon={faArrowRightFromBracket}
-                    className="size-5"
-                  />
-                  <p className="text-base">Logout</p>
-                </div>
-              </a>
-            </div>
+              ))}
           </div>
         </div>
       </div>
