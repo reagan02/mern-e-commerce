@@ -7,7 +7,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({});
@@ -15,36 +15,42 @@ const Signup = () => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const isLoggedIn = sessionStorage.getItem("userID");
 
-    const errors = validateInput(name, email, password);
+    if (isLoggedIn) {
+      alert("Please Logout First Before Creating an Account");
+    } else {
+      const errors = validateInput(userName, email, password);
 
-    if (Object.keys(errors).length > 0) {
-      setError(errors);
-      console.error(errors);
-      return;
-    }
+      if (Object.keys(errors).length > 0) {
+        setError(errors);
+        console.error(errors);
+        return;
+      }
 
-    const account = { name, email, password };
+      const account = { userName, email, password };
 
-    try {
-      const response = await axios.post(
-        "http://localhost:4000/api/accounts",
-        account
-      );
-      setName("");
-      setEmail("");
-      setPassword("");
+      try {
+        const response = await axios.post(
+          "http://localhost:4000/api/accounts",
+          account
+        );
+        setUserName("");
+        setEmail("");
+        setPassword("");
 
-      console.log("new account added", response.data);
-      console.log(response.data); // { signup: true }
-      sessionStorage.setItem("userName", response.data.user.name);
-      navigate("/home");
-      window.location.reload();
-    } catch (error) {
-      // Check if the error response has a status of 400 and log it
-      if (error.response && error.response.status === 400) {
-        console.log("Email is already in use");
-        setError({ email: error.response.data.error });
+        console.log("new account added", response.data);
+        console.log(response.data); // { signup: true }
+        sessionStorage.setItem("userID", response.data.user._id);
+        navigate("/home");
+        window.location.reload();
+      } catch (error) {
+        console.error(error);
+        // Check if the error response has a status of 400 and log it
+        if (error.response && error.response.status === 400) {
+          console.log("Email is already in use");
+          setError({ email: error.response.data.error });
+        }
       }
     }
   };
@@ -64,20 +70,20 @@ const Signup = () => {
 
             {/* POST FORM to create account */}
             <form onSubmit={handleSubmit}>
-              {/* Name */}
+              {/* User Name */}
               <input
                 type="text"
-                placeholder="Name"
+                placeholder="Username"
                 className="text-xl mt-20 border-none w-80 outline-none"
-                value={name}
+                value={userName}
                 onChange={(e) => {
-                  setName(e.target.value);
-                  setError((prevErrors) => ({ ...prevErrors, name: null }));
+                  setUserName(e.target.value);
+                  setError((prevErrors) => ({ ...prevErrors, userName: null }));
                 }}
               />
               <hr className="my-2" />
 
-              {/* Display Name Error Message */}
+              {/* Display User Name Error Message */}
               {error.name && <p className="text-red-500">{error.name}</p>}
 
               {/* Email or Phone Number */}

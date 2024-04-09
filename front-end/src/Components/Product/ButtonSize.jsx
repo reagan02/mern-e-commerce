@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 const ButtonSize = (props) => {
-  return <button className="border-2 rounded-md size-10">{props.size}</button>;
+  return <div className="border-2 rounded-md size-10">{props.size}</div>;
 };
 
 export default ButtonSize;

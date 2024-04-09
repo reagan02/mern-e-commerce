@@ -1,8 +1,8 @@
-export const validateInput = (name, email, password) => {
+export const validateInput = (userName, email, password) => {
   const errors = {};
 
-  if (!name || name.length > 32) {
-    errors.name =
+  if (!userName || userName.length > 32) {
+    errors.userName =
       "Name is required and should be less than or equal to 32 characters.";
   }
 

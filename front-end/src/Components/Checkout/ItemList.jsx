@@ -4,7 +4,10 @@ const ItemList = (props) => {
     <div className="flex items-center w-full justify-between mb-8">
       <div className="flex items-center">
         <img src={props.image} alt="" className="size-14" />
-        <p className="px-5">{props.productName}</p>
+        <div className="flex px-5">
+          <p className="">{props.productName}</p>
+          <p className="pl-2">({props.quantity})</p>
+        </div>
       </div>
       <p>$ {props.price}</p>
     </div>
@@ -16,4 +19,5 @@ ItemList.propTypes = {
   image: PropTypes.string.isRequired,
   productName: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
+  quantity: PropTypes.number.isRequired,
 };

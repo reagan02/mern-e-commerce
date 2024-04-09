@@ -29,7 +29,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await axios.post("http://localhost:4000/api/accounts/logout");
-      sessionStorage.removeItem("userName"); // Clear user data from local storage
+      sessionStorage.removeItem("userID"); // Clear user data from local storage
       console.log("Session destroyed");
       setClick(!click);
       navigate("/login");
@@ -38,7 +38,7 @@ const Navbar = () => {
       console.error("Error destroying session:", error);
     }
   };
-  const isUserLoggedIn = sessionStorage.getItem("userName") !== null;
+  const isUserLoggedIn = sessionStorage.getItem("userID") !== null;
   return (
     <div className="h-18 w-full flex border-b justify-between items-end pt-7 pb-4 bg-white lg:px-20 md:px-14 xs:px-10">
       {/* Company Name // Title */}

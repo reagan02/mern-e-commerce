@@ -18,11 +18,12 @@ import NotFound from "./Pages/NotFound";
 import Checkout from "./Pages/Checkout";
 import Productpage from "./Pages/Productpage";
 import Wishlist from "./Pages/Wishlist";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<Mainpage />}>
-        <Route path="/home" element={<Homepage />} />
+        <Route path="home" element={<Homepage />} />
         <Route path="contact" element={<Contact />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
@@ -30,7 +31,7 @@ const router = createBrowserRouter(
         <Route path="cart" element={<Cart />} />
         <Route path="*" element={<NotFound />} />
         <Route path="checkout" element={<Checkout />} />
-        <Route path="product" element={<Productpage />} />
+        <Route path="product/:id" element={<Productpage />} />
         <Route path="wishlist" element={<Wishlist />} />
       </Route>
     </Route>

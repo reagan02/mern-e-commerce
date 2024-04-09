@@ -41,11 +41,33 @@ const addProduct = async (req, res) => {
 const getProducts = async (req, res) => {
   try {
     const products = await ProductModel.find({});
-    console.log("products fetched successfully");
+
     res.status(200).json(products);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
+  }
+};
+
+// Get single product
+const getSingleProduct = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await ProductModel.findById(id);
+    res.status(200).json({ product });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
+// Get all smartphone
+const getSmartphone = async (req, res) => {
+  try {
+    const products = await ProductModel.find({ category: "Smartphone" });
+    res.status(200).json(products);
+  } catch (error) {
+    res.json({ error: error.message });
   }
 };
 
@@ -79,6 +101,8 @@ const countProducts = async (req, res) => {
 module.exports = {
   addProduct,
   getProducts,
+  getSingleProduct,
   deleteProduct,
   countProducts,
+  getSmartphone,
 };

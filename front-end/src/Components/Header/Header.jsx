@@ -1,12 +1,23 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 const Header = () => {
   const [userName, setUserName] = useState(null);
 
   useEffect(() => {
-    const storedUserName = sessionStorage.getItem("userName");
-    if (storedUserName) {
-      setUserName("Welcome " + storedUserName);
-    }
+    const userID = sessionStorage.getItem("userID");
+    const fetchUsername = async () => {
+      {
+        try {
+          const response = await axios.get(
+            `http://localhost:4000/api/accounts/${userID}`
+          );
+          setUserName("Welcome " + response.data.account.userName);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+    fetchUsername();
   }, []);
   return (
     <div className="bg-black w-full flex xs:justify-center md:justify-between sm:items-center lg:px-20 lg:py-2 md:px-14 md:py-2 xs:px-10 xs:py-1 ">

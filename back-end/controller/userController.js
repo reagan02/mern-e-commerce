@@ -1,6 +1,7 @@
 const user = require("./userController");
-const Account = require("../models/CreateAccModel");
+const Account = require("../models/UserModel");
 const mongoose = require("mongoose");
+const { response } = require("express");
 
 // get all account
 const getAllAccount = async (req, res) => {
@@ -18,7 +19,6 @@ const getAccount = async (req, res) => {
   }
   // find the account
   const account = await Account.findById(id);
-
   if (!account) {
     return res.status(404).json({ error: "Account not found" });
   }
@@ -27,10 +27,10 @@ const getAccount = async (req, res) => {
 
 // create a new account
 const createAccount = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { userName, email, password } = req.body;
 
   // check if email is already in use
-  const existingUser = await Account.findOne({ email });
+  const existingUser = await Account.findOne({ userName, email });
   if (existingUser) {
     console.log("Email is already in use");
     return res.status(400).json({ error: "Email is already in use" });
@@ -38,7 +38,7 @@ const createAccount = async (req, res) => {
   // add new acc to db
   try {
     const user = await Account.create({
-      name,
+      userName,
       email,
       password,
     });
@@ -55,49 +55,53 @@ const createAccount = async (req, res) => {
   }
 };
 
-// add address to an existing account
-const addAddress = async (req, res) => {
-  const { id } = req.params; // get the user id from the request parameters
-  const { street, city, state, zip } = req.body; // get the address details from the request body
-
-  try {
-    // find the user by id and update their address
-    const user = await Account.findByIdAndUpdate(
-      id,
-      { $push: { address: { street, city, state, zip } } },
-      { new: true, runValidators: true }
-    );
-
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    res.status(200).json({ user });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
-// update a workout
+// update account
 const updateAccount = async (req, res) => {
   const { id } = req.params; // id of the account
-  const { name, email, password } = req.body; // new data
+  const {
+    userName,
+    email,
+    password,
+    phoneNumber,
+    firstName,
+    lastName,
+    streetAddress,
+    optionalAddress,
+    townCity,
+  } = req.body;
 
   // check if the account is valid
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "Account Not Exist" });
   }
-  // find the account and update
-  const account = await Account.findOneAndUpdate(
-    { _id: id },
-    { name, email, password, _id: id },
-    { new: true }
-  );
 
-  if (!account) {
-    return res.status(404).json({ error: "Account not found" });
+  //create a new object with only fields that is provided in the req.body
+  const update = {
+    ...(userName && { userName }),
+    ...(email && { email }),
+    ...(password && { password }),
+    ...(phoneNumber && { phoneNumber }),
+    ...(firstName && { firstName }),
+    ...(lastName && { lastName }),
+    ...(streetAddress && { streetAddress }),
+    ...(optionalAddress && { optionalAddress }),
+    ...(townCity && { townCity }),
+  };
+
+  try {
+    // find the account and update
+    const account = await Account.findOneAndUpdate({ _id: id }, update, {
+      new: true,
+    });
+    if (!account) {
+      return res.status(404).json({ error: "Account not found" });
+    } else {
+      console.log("Account updated:", account);
+      res.status(200).json({ account });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
-  res.status(200).json({ account });
 };
 
 // delete a account
@@ -117,16 +121,6 @@ const deleteAccount = async (req, res) => {
   res.status(200).json({ account });
 };
 
-// check Session
-const checkSession = (req, res) => {
-  if (req.session.user) {
-    res.json({ user: req.session.user });
-    console.log("session1:", req.session.user);
-  } else {
-    res.status(401).json({ error: "Unauthenticated" });
-  }
-};
-
 // login an account
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -142,7 +136,7 @@ const login = async (req, res) => {
     // If authentication is successful:
     req.session.user = {
       id: user._id, // The ID of the user
-      username: user.name, // The username of the user
+      username: user.userName, // The username of the user
     };
     console.log("Login Account", req.session.user);
     res.status(200).json({ user });
@@ -170,8 +164,6 @@ module.exports = {
   createAccount,
   deleteAccount,
   updateAccount,
-  checkSession,
   login,
   logout,
-  addAddress,
 };

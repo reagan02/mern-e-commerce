@@ -14,18 +14,24 @@ const Login = () => {
   // POST request to log in
   const submit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        "http://localhost:4000/api/accounts/login",
-        account
-      );
-      console.log(response.data); // { login: true }
-      console.log("login success");
-      sessionStorage.setItem("userName", response.data.user.name);
+    const isLoggedIn = sessionStorage.getItem("userID");
+    if (isLoggedIn) {
+      alert("You are already logged in");
       navigate("/home");
-      window.location.reload();
-    } catch (error) {
-      setError("Invalid Email or Password");
+    } else {
+      try {
+        const response = await axios.post(
+          "http://localhost:4000/api/accounts/login",
+          account
+        );
+        console.log(response.data); // { login: true }
+        console.log("login success");
+        sessionStorage.setItem("userID", response.data.user._id);
+        navigate("/home");
+        window.location.reload();
+      } catch (error) {
+        setError("Invalid Email or Password");
+      }
     }
   };
   return (

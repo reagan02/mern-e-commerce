@@ -7,6 +7,8 @@ import Section from "../Components/Homepage/Section";
 import Itemcard from "../Components/Homepage/Itemcard";
 import Category from "../Components/Homepage/Category";
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import {
   faMobileButton,
@@ -47,9 +49,26 @@ const Homepage = () => {
     return () => clearInterval(timer);
   }, [time]);
 
+  const [data, setData] = useState([]); // Added state for data
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get("http://localhost:4000/api/products");
+      setData(response.data);
+    };
+    fetchData();
+  }, []); // Removed data from dependency array
+
+  const navigate = useNavigate();
+
+  // Function to handle item card click
+  const handleItemCard = (_id) => {
+    navigate(`/product/${_id}`);
+  };
   return (
     <div className="">
       <Nav />
+
       {/* Flash Sales Section */}
       <Section
         subtitle={<Subtitle subtitle="Today's" />}
@@ -102,42 +121,29 @@ const Homepage = () => {
             </div>
           </div>
         }
+        component={<Arrow />}
         body={
           // Item Card Lists
           <div className="flex justify-between mt-10">
-            <Itemcard
-              image="https://m.media-amazon.com/images/I/61IU5NoMIaL.jpg"
-              name="HAVIT HV-G92 Gamepad"
-              price="$120"
-              discount="-40%"
-            />
-            <Itemcard
-              image="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRBN6Ata5yKhgmCtE5fFlpsu8rTNzRqVFryIvuMFEv45fcTFtN00tl5wJWdT6LkQHwBORFKIPMwUxe9F-l98aNcO9E5BW9wA0oIzw29dielIOThgsLyppt8KA"
-              name="Romoss mini Power Banks 2in1"
-              price="$75"
-              discount="-15%"
-            />
-            <Itemcard
-              image="https://lzd-img-global.slatic.net/g/p/2bf7d5377e94d0ba15ff02f560aa01aa.jpg_400x400q80.jpg"
-              name="Case for iPhone 15"
-              price="$6"
-              discount="-3%"
-            />
-            <Itemcard
-              image="https://lzd-img-global.slatic.net/g/p/6f3e88e7d83bddcfc5f6d08de124d406.jpg_400x400q75.jpg_.webp"
-              name="YN SHEESH Graphic-tees"
-              price="$90"
-              discount="-10%"
-            />
-            <Itemcard
-              image="https://lzd-img-global.slatic.net/g/ff/kf/S2d754a35996a4e82b90049212495ebaa5.jpg_400x400q75.jpg_.webp"
-              name="AXEGN PLAIN TSHIRT UNISEX"
-              price="$40"
-              discount="-5%"
-            />
+            {data.slice(0, 5).map((item, index) => {
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleItemCard(item._id)} //
+                  className="text-left"
+                >
+                  <Itemcard
+                    image={item.images[0]}
+                    name={item.name}
+                    price={item.variants[0].price}
+                    discount={item.discount}
+                    rating={item.rating}
+                  />
+                </button>
+              );
+            })}
           </div>
         }
-        component={<Arrow />}
         showButton={
           <div className="my-6">
             <Button width="16" height="3" title="View All Product" />
@@ -170,41 +176,6 @@ const Homepage = () => {
         title={
           <div className="mt-5">
             <Title title="Best Selling Products" />
-          </div>
-        }
-        body={
-          // Item Card Lists
-          <div className="flex justify-between mt-10">
-            <Itemcard
-              image="https://m.media-amazon.com/images/I/61IU5NoMIaL.jpg"
-              name="HAVIT HV-G92 Gamepad"
-              price="$120"
-              discount="-40%"
-            />
-            <Itemcard
-              image="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRBN6Ata5yKhgmCtE5fFlpsu8rTNzRqVFryIvuMFEv45fcTFtN00tl5wJWdT6LkQHwBORFKIPMwUxe9F-l98aNcO9E5BW9wA0oIzw29dielIOThgsLyppt8KA"
-              name="Romoss mini Power Banks 2in1"
-              price="$75"
-              discount="-15%"
-            />
-            <Itemcard
-              image="https://lzd-img-global.slatic.net/g/p/2bf7d5377e94d0ba15ff02f560aa01aa.jpg_400x400q80.jpg"
-              name="Case for iPhone 15"
-              price="$6"
-              discount="-3%"
-            />
-            <Itemcard
-              image="https://lzd-img-global.slatic.net/g/p/6f3e88e7d83bddcfc5f6d08de124d406.jpg_400x400q75.jpg_.webp"
-              name="YN SHEESH Graphic-tees"
-              price="$90"
-              discount="-10%"
-            />
-            <Itemcard
-              image="https://lzd-img-global.slatic.net/g/ff/kf/S2d754a35996a4e82b90049212495ebaa5.jpg_400x400q75.jpg_.webp"
-              name="AXEGN PLAIN TSHIRT UNISEX"
-              price="$40"
-              discount="-5%"
-            />
           </div>
         }
         component={<Button width="8" height="3" title="View All" />}
@@ -252,71 +223,6 @@ const Homepage = () => {
                 <p className="text-2xl font-inter">31</p>
               </div>
             </div>
-          </div>
-        }
-        body={
-          // Item Card Lists
-          <div className="grid grid-cols-5 grid-rows-2 mt-10 gap-10">
-            <Itemcard
-              image="https://m.media-amazon.com/images/I/61IU5NoMIaL.jpg"
-              name="HAVIT HV-G92 Gamepad"
-              price="$120"
-              discount="-40%"
-            />
-            <Itemcard
-              image="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRBN6Ata5yKhgmCtE5fFlpsu8rTNzRqVFryIvuMFEv45fcTFtN00tl5wJWdT6LkQHwBORFKIPMwUxe9F-l98aNcO9E5BW9wA0oIzw29dielIOThgsLyppt8KA"
-              name="Romoss mini Power Banks 2in1"
-              price="$75"
-              discount="-15%"
-            />
-            <Itemcard
-              image="https://lzd-img-global.slatic.net/g/p/2bf7d5377e94d0ba15ff02f560aa01aa.jpg_400x400q80.jpg"
-              name="Case for iPhone 15"
-              price="$6"
-              discount="-3%"
-            />
-            <Itemcard
-              image="https://lzd-img-global.slatic.net/g/p/6f3e88e7d83bddcfc5f6d08de124d406.jpg_400x400q75.jpg_.webp"
-              name="YN SHEESH Graphic-tees"
-              price="$90"
-              discount="-10%"
-            />
-            <Itemcard
-              image="https://lzd-img-global.slatic.net/g/ff/kf/S2d754a35996a4e82b90049212495ebaa5.jpg_400x400q75.jpg_.webp"
-              name="AXEGN PLAIN TSHIRT UNISEX"
-              price="$40"
-              discount="-5%"
-            />
-            <Itemcard
-              image="https://m.media-amazon.com/images/I/61IU5NoMIaL.jpg"
-              name="HAVIT HV-G92 Gamepad"
-              price="$120"
-              discount="-40%"
-            />
-            <Itemcard
-              image="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRBN6Ata5yKhgmCtE5fFlpsu8rTNzRqVFryIvuMFEv45fcTFtN00tl5wJWdT6LkQHwBORFKIPMwUxe9F-l98aNcO9E5BW9wA0oIzw29dielIOThgsLyppt8KA"
-              name="Romoss mini Power Banks 2in1"
-              price="$75"
-              discount="-15%"
-            />
-            <Itemcard
-              image="https://lzd-img-global.slatic.net/g/p/2bf7d5377e94d0ba15ff02f560aa01aa.jpg_400x400q80.jpg"
-              name="Case for iPhone 15"
-              price="$6"
-              discount="-3%"
-            />
-            <Itemcard
-              image="https://lzd-img-global.slatic.net/g/p/6f3e88e7d83bddcfc5f6d08de124d406.jpg_400x400q75.jpg_.webp"
-              name="YN SHEESH Graphic-tees"
-              price="$90"
-              discount="-10%"
-            />
-            <Itemcard
-              image="https://lzd-img-global.slatic.net/g/ff/kf/S2d754a35996a4e82b90049212495ebaa5.jpg_400x400q75.jpg_.webp"
-              name="AXEGN PLAIN TSHIRT UNISEX"
-              price="$40"
-              discount="-5%"
-            />
           </div>
         }
         component={<Arrow />}
