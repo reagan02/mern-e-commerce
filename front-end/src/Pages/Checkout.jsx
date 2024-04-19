@@ -1,30 +1,27 @@
 import InputDetails from "../Components/Checkout/InputDetails";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ItemList from "../Components/Checkout/ItemList";
 import Button from "../Components/Homepage/Button";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 const Checkout = () => {
-  const isLoggedIn = sessionStorage.getItem("userID");
   const navigate = useNavigate();
   const location = useLocation(); // location hook
+  const isLoggedIn = sessionStorage.getItem("userID"); // get the user ID
+  const userID = sessionStorage.getItem("userID");
   const [isChecked, setIsChecked] = useState(false);
-  const { quantity, id, size } = location.state; // arguments that is passef from the product page
   const shippingFee = 0;
-
-  const handleCheckboxClick = () => {
-    console.log(isLoggedIn);
-    setIsChecked(!isChecked);
-    console.log(quantity);
-    console.log(id);
-    console.log(size);
-  };
-  useEffect(() => {
-    if (!isLoggedIn) {
-      alert("Please Login First");
-      navigate("/login");
-    }
-  }, [isLoggedIn, navigate]);
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [subtotalPrice, setSubtotalPrice] = useState(0);
+  const totalPrice = subtotalPrice + shippingFee;
+  const coupunCode = "sampleCode";
+  const [cartData, setCartData] = useState({});
+  // locations state from the product page
+  // Initialize the refs
+  const productID = useRef(null);
+  const quantity = useRef(null);
+  const size = useRef(null);
+  const [locationState, setLocationState] = useState(false); // [productID, quantity, size, from
 
   // Place Order
   const [billingDetails, setBillingDetails] = useState({
@@ -37,8 +34,6 @@ const Checkout = () => {
     email: "",
   });
 
-  const [subtotal, setSubtotal] = useState(0); // Subtotal
-  const total = subtotal + shippingFee; // Total
   // Product Data
   const [productData, setProductData] = useState({
     name: "",
@@ -46,9 +41,32 @@ const Checkout = () => {
     image: "",
   });
 
-  const userID = sessionStorage.getItem("userID"); // get the user ID
+  // Order Items Array Data
 
-  // Place Order
+  const [orderItems, setOrderItems] = useState([
+    {
+      productID: "",
+      size: "",
+      price: 0,
+      quantity: 0,
+    },
+  ]);
+
+  // Check if user is logged in
+  useEffect(() => {
+    if (!isLoggedIn) {
+      alert("Please Login First");
+      navigate("/login");
+    }
+  }, [isLoggedIn, navigate]);
+
+  // Handle Checkbox Click
+  const handleCheckboxClick = () => {
+    console.log(isLoggedIn);
+    setIsChecked(!isChecked);
+  };
+
+  // Handle Place Order
   const handlePlaceOrder = async () => {
     try {
       const response = await axios.patch(
@@ -56,35 +74,96 @@ const Checkout = () => {
         billingDetails
       );
       console.log(response.data);
+      if (location.state) {
+        const orderData = await axios.post(
+          "http://localhost:4000/api/orders/",
+          {
+            userID,
+            billingDetails,
+            orderItems,
+            totalPrice,
+            coupunCode,
+            paymentMethod,
+          }
+        );
+        console.log(orderData.data);
+        alert("Order Placed Successfully");
+      } else {
+        let totalProductsPrice = 0;
+        for (let i = 0; i < cartData.products.length; i++) {
+          totalProductsPrice +=
+            cartData.products[i].price * cartData.products[i].quantity;
+        }
+        setSubtotalPrice(totalProductsPrice);
+        const orderData = await axios.post(
+          "http://localhost:4000/api/orders/",
+          {
+            userID,
+            billingDetails,
+            orderItems: cartData.products,
+            totalPrice,
+            coupunCode,
+            paymentMethod,
+          }
+        );
+        console.log(orderData.data);
+        alert("Order Placed Successfully");
+      }
     } catch (error) {
       console.error("Error:", error);
+      alert("Error Occured");
     }
   };
+
   // Fetch User && Product Data
   useEffect(() => {
     const fetchData = async () => {
-      try {
+      const responseUser = await axios.get(
+        `http://localhost:4000/api/accounts/${userID}`
+      );
+      setBillingDetails(responseUser.data.account); // set the billing details
+
+      if (!location.state) {
+        setLocationState(false);
         const response = await axios.get(
-          `http://localhost:4000/api/accounts/${userID}`
+          `http://localhost:4000/api/cart/user?userID=${userID}`
         );
-        const responseProduct = await axios.get(
-          `http://localhost:4000/api/products/${id}`
-        );
-        setBillingDetails(response.data.account); // set the billing details
-        setProductData({
-          name: responseProduct.data.product.name,
-          price: responseProduct.data.product.variants[size].price,
-          image: responseProduct.data.product.images[0],
-        });
-        setSubtotal(
-          responseProduct.data.product.variants[size].price * quantity
-        );
-      } catch (error) {
-        console.error(error);
+        setCartData(response.data.response);
+      } else {
+        productID.current = location.state.productID;
+        quantity.current = location.state.quantity;
+        size.current = location.state.size;
+
+        try {
+          const id = productID.current;
+          const responseProduct = await axios.get(
+            `http://localhost:4000/api/products/${id}`
+          );
+          setOrderItems([
+            {
+              productID: productID.current,
+              size: size.current,
+              price: productData.price,
+              quantity: quantity.current,
+            },
+          ]);
+          setProductData({
+            name: responseProduct.data.product.name,
+            price: responseProduct.data.product.variants[size.current].price,
+            image: responseProduct.data.product.images[0],
+          });
+          setSubtotalPrice(
+            responseProduct.data.product.variants[size.current].price *
+              quantity.current
+          );
+          setLocationState(true);
+        } catch (error) {
+          console.error(error);
+        }
       }
     };
     fetchData();
-  }, [userID, id, size, quantity]);
+  }, [userID, location.state, productData]);
   return (
     <div className="mt-10 pb-40">
       <ul className="flex text-xl">
@@ -97,7 +176,7 @@ const Checkout = () => {
         </li>
         <li className="px-3">/</li>
         <li>
-          <a href="">Product</a>
+          <a href="">{productData.name}</a>
         </li>
         <li className="px-3">/</li>
         <li>
@@ -200,18 +279,34 @@ const Checkout = () => {
           </div>
         </div>
         {/*Item List to be Checkout  */}
-        <div className="w-full mt-10">
-          <div className="mr-32">
-            <ItemList
-              image={productData.image}
-              productName={productData.name}
-              price={productData.price}
-              quantity={quantity}
-            />
+        <div className="w-full mt-10  ">
+          <div
+            className="mr-32  overflow-y-auto"
+            style={{ maxHeight: "288px" }}
+          >
+            {locationState && (
+              <ItemList
+                image={productData.image}
+                productName={productData.name}
+                price={productData.price}
+                quantity={quantity.current}
+              />
+            )}
+            {!locationState &&
+              cartData.products &&
+              cartData.products.map((item, index) => (
+                <ItemList
+                  key={index}
+                  image={item.image}
+                  productName={item.productName}
+                  price={item.price}
+                  quantity={item.quantity}
+                />
+              ))}
           </div>
           <div className="flex justify-between mr-32">
             <p>SubTotal:</p>
-            <p>{subtotal}</p>
+            <p>{subtotalPrice}</p>
           </div>
           <hr className=" my-3 mr-40" />
           <div className="flex justify-between mr-32">
@@ -221,12 +316,14 @@ const Checkout = () => {
           <hr className=" my-3 mr-40" />
           <div className="flex justify-between mr-32">
             <p>Total:</p>
-            <p>{total}</p>
+            <p>{totalPrice}</p>
           </div>
           <div className="flex items-center py-5 mr-40">
             <input
               type="radio"
-              onChange={handleCheckboxClick}
+              name="paymentMethod"
+              value={"Bank"}
+              onClick={(e) => setPaymentMethod(e.target.value)}
               className="size-5 rounded-full"
             />
             <p className="px-5">Bank </p>
@@ -234,7 +331,9 @@ const Checkout = () => {
           <div className="flex items-center mr-40">
             <input
               type="radio"
-              onChange={handleCheckboxClick}
+              name="paymentMethod"
+              value={"CashOnDelivery"}
+              onClick={(e) => setPaymentMethod(e.target.value)}
               className="size-5 rounded-full"
             />
             <p className="px-5">Cash On Delivery </p>

@@ -12,7 +12,7 @@ const {
 const router = express.Router();
 
 // GET all accounts
-// router.get("/", getAllAccount);
+router.get("/", getAllAccount);
 
 // GET single account
 router.get("/:id", getAccount);

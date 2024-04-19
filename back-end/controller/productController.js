@@ -55,6 +55,7 @@ const getSingleProduct = async (req, res) => {
 
   try {
     const product = await ProductModel.findById(id);
+
     res.status(200).json({ product });
   } catch (error) {
     res.json({ error: error.message });

@@ -3,7 +3,7 @@ import SmallImage from "../Components/Product/SmallImage";
 import Button from "../Components/Homepage/Button";
 import deliver from "../assests//icon-delivery.png";
 import iconreturn from "../assests/Icon-return.png";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -17,6 +17,7 @@ const Productpage = () => {
   const [variantIndex, setVariantIndex] = useState(0); // variant
   const [colorIndex, setColorIndex] = useState(0); // color
   const [quantity, setQuantity] = useState(1); // quantity
+  const userID = sessionStorage.getItem("userID");
 
   const navigate = useNavigate();
   // Fetch Product Data
@@ -40,13 +41,39 @@ const Productpage = () => {
 
   // Decrement Quantity
   const decrementQuantity = () => {
-    if (quantity > 1) {
+    if (quantity >= 1) {
       setQuantity(quantity - 1);
-    } else if (quantity === 1 && data.variants[variantIndex].stock === 0) {
-      setQuantity(0);
+    } else {
+      alert("Out of Stock");
     }
   };
+  const productData = {
+    productID: id,
+    productName: data && data.name,
+    size: data && data.variants && data.variants[variantIndex].size,
+    price: data && data.variants && data.variants[variantIndex].price,
+    quantity: quantity,
+    image: data && data.images && data.images[0],
+  };
+  // Add to Cart
+  const handleCart = async () => {
+    await axios
+      .post("http://localhost:4000/api/cart/", {
+        userID,
+        productData,
+      })
+      .then((res) => {
+        setQuantity(1);
+        alert(res.data.message);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
+  const handleQuantity = () => {
+    setQuantity(quantity);
+  };
   return (
     <div className="mt-10 pb-40">
       <ul className="flex text-xl">
@@ -55,11 +82,11 @@ const Productpage = () => {
         </li>
         <li className="px-3">/</li>
         <li>
-          <a href="">{data.category}</a>
+          <a href="">{data && data.category}</a>
         </li>
         <li className="px-3">/</li>
         <li className="font-semibold">
-          <a href="">{data.brand}</a>
+          <a href="">{data && data.brand}</a>
         </li>
       </ul>
 
@@ -93,7 +120,9 @@ const Productpage = () => {
         {/* Product Details */}
         <div className="w-full pl-20 ">
           {/* Product Name */}
-          <h1 className="text-2xl font-inter font-semibold">{data.name}</h1>
+          <h1 className="text-2xl font-inter font-semibold">
+            {data && data.name}
+          </h1>
           {/* Product Stock */}
           <div className="flex justify-start py-2">
             <p className="text-base">
@@ -110,7 +139,7 @@ const Productpage = () => {
           </h1>
           <p className="py-5">
             {/* Desciprtion */}
-            {data.description}
+            {data && data.description}
           </p>
           <hr />
           {/* Colors */}
@@ -173,7 +202,12 @@ const Productpage = () => {
               >
                 -
               </button>
-              <input type="text" className="border-2" value={quantity} />
+              <input
+                type="text"
+                className="border-2"
+                value={quantity}
+                onChange={handleQuantity}
+              />
               <button
                 className="size-10 justify-center text-2xl bg-orange-500"
                 onClick={incrementQuantity}
@@ -186,14 +220,22 @@ const Productpage = () => {
             <button
               onClick={() => {
                 navigate("/checkout", {
-                  state: { quantity: quantity, id: id, size: variantIndex },
+                  state: {
+                    productID: id,
+                    quantity: quantity,
+                    size: variantIndex,
+                    from: `product${id}`,
+                  },
                 });
               }}
             >
               <Button title="Buy Now " height="3.4" width="8" />
             </button>
-            <button className="border-2 rounded-md py-1 px-2">
-              <FontAwesomeIcon icon={faHeart} size="2x" />
+            <button
+              className="border-2 rounded-md py-1 px-2"
+              onClick={handleCart}
+            >
+              <FontAwesomeIcon icon={faCartShopping} size="2x" />
             </button>
           </div>
           <div className="border-2 flex py-3">

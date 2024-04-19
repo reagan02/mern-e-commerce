@@ -4,7 +4,8 @@ const express = require("express"); // import express
 const session = require("express-session"); // import express-session
 const userRoutes = require("./routes/userRoutes"); // import routes
 const productRoutes = require("./routes/productRoutes"); // import routes
-
+const orderRoutes = require("./routes/orderRoutes"); // import routes
+const cartRoutes = require("./routes/cartRoutes"); // import routes
 // express app
 const app = express();
 const cors = require("cors");
@@ -24,6 +25,8 @@ app.use(
 //routes
 app.use("/api/accounts", userRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/cart", cartRoutes);
 
 //Database Connection with mongoDB
 mongoose

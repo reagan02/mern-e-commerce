@@ -39,6 +39,11 @@ const Navbar = () => {
     }
   };
   const isUserLoggedIn = sessionStorage.getItem("userID") !== null;
+
+  const handleMyCart = () => {
+    navigate("/cart");
+    setClick(!click);
+  };
   return (
     <div className="h-18 w-full flex border-b justify-between items-end pt-7 pb-4 bg-white lg:px-20 md:px-14 xs:px-10">
       {/* Company Name // Title */}
@@ -97,12 +102,12 @@ const Navbar = () => {
                       <p className="text-base">Manage My Account</p>
                     </div>
                   </a>
-                  <a href="" className="">
+                  <button onClick={handleMyCart}>
                     <div className="my-3 px-5 flex items-center gap-4">
                       <FontAwesomeIcon icon={faCircleUser} className="size-5" />
-                      <p className="text-base">My Order</p>
+                      <p className="text-base">My Cart</p>
                     </div>
-                  </a>
+                  </button>
                   <a href="" className="">
                     <div className="my-3 px-5 flex items-center gap-4">
                       <FontAwesomeIcon
