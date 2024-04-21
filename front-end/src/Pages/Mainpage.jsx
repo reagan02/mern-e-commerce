@@ -11,12 +11,12 @@ const Mainpage = () => {
         <Navbar />
       </div>
 
-      <div className="px-20">
+      <div className="2xl:px-20 lg:px-18 md:px-14 xs:px-5 sm:px-8">
         <Outlet />
       </div>
-      <div>
+      {/* <div>
         <Footer />
-      </div>
+      </div> */}
     </div>
   );
 };

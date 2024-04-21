@@ -13,15 +13,15 @@ const Footer = () => {
       <div className="w-full text-white flex justify-between pb-20">
         {/* Exclusive */}
         <div className="">
-          <h2 className="font-semibold text-2xl pb-5">Exclusive</h2>
+          <h2 className="font-semibold text-xl pb-5">Exclusive</h2>
           <div className="flex flex-col gap-4 pb-2">
-            <h3 className="font-inter text-xl">Subscribe</h3>
+            <h3 className="font-inter text-lg">Subscribe</h3>
             <h4>Get 10% off your first order</h4>
           </div>
           <div className="flex border-2 justify-between px-2 items-center h-12 rounded-md">
             <input
               type="text"
-              className="text-gray-700 bg-transparent"
+              className="bg-transparent outline-none "
               placeholder="Enter Your Email"
             />
             <FontAwesomeIcon icon={faCaretRight} style={{ color: "#ffffff" }} />
@@ -29,7 +29,7 @@ const Footer = () => {
         </div>
         {/* Suppoert */}
         <div>
-          <h2 className="font-semibold text-2xl pb-5">Support</h2>
+          <h2 className="font-semibold text-xl pb-5">Support</h2>
           <div className="flex flex-col gap-4">
             <div>
               <p>111 Bijoy sarani, Dhaka,</p>
@@ -41,7 +41,7 @@ const Footer = () => {
         </div>
         {/* Account */}
         <div>
-          <h2 className="font-semibold text-2xl pb-5">Account</h2>
+          <h2 className="font-semibold text-xl pb-5">Account</h2>
           <div className="flex flex-col gap-4">
             <p>My Account</p>
             <p>Login / Register</p>
@@ -52,7 +52,7 @@ const Footer = () => {
         </div>
         {/* Quick Link */}
         <div>
-          <h2 className="font-semibold text-2xl pb-5">Quick Link</h2>
+          <h2 className="font-semibold text-xl pb-5">Quick Link</h2>
           <div className="flex flex-col gap-4">
             <p>Privacy Policy</p>
             <p>Terms Of Use</p>
@@ -63,7 +63,7 @@ const Footer = () => {
         {/* Download App */}
 
         <div>
-          <h2 className="font-semibold text-2xl pb-5">Download App</h2>
+          <h2 className="font-semibold text-xl pb-5">Download App</h2>
           <div className="flex flex-col gap-4">
             <p className="text-sm"> Save $3 with App New User Only</p>
             <img src={qr} alt="" />

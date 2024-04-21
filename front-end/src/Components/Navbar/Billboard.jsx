@@ -10,8 +10,8 @@ const Billboard = () => {
     "https://lzd-img-global.slatic.net/g/tps/imgextra/i4/O1CN01XpHuje27FnYoNofDV_!!6000000007768-0-tps-1976-688.jpg_2200x2200q80.jpg",
   ];
   return (
-    <div className="w-full h-full ml-11 relative ">
-      <div className="relative h-full ">
+    <div className="w-full border border-red-500">
+      {/* <div className="  ">
         <img src={slides[currentSlide]} className="object-cover" />
         <div className="flex justify-center py-2 gap-2 absolute bottom-0 left-0 right-0">
           {slides.map((slide, index) => (
@@ -24,7 +24,7 @@ const Billboard = () => {
             ></button>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

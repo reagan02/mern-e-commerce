@@ -1,6 +1,9 @@
 const Asidebar = () => {
+  {
+    /* Aside Bar */
+  }
   return (
-    <aside className="w-64">
+    <aside className="w-64 border border-green-500">
       <ul className=" flex flex-col h-full justify-between text-base border-r-2 ">
         <li>
           <div className="flex justify-between">

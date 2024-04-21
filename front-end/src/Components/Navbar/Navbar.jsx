@@ -7,11 +7,13 @@ import {
   faBagShopping,
   faXmarkCircle,
   faStar,
+  faBars,
   faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import "./Navbar.css";
 
 const Navbar = () => {
   const [click, setClick] = useState(false);
@@ -45,53 +47,95 @@ const Navbar = () => {
     setClick(!click);
   };
   return (
-    <div className="h-18 w-full flex border-b justify-between items-end pt-7 pb-4 bg-white lg:px-20 md:px-14 xs:px-10">
+    <div className="h-18 w-full flex border-b justify-between items-end pt-3 pb-2 md:pt-5 md:pb-3 lg:pt-7 lg:pb-4 bg-white 2xl:px-20 lg:px-18 md:px-14 xs:px-5 sm:px-8">
       {/* Company Name // Title */}
       <NavLink to="home" className="">
-        <h1 className="text-4xl font-inter font-semibold ">Exclusive</h1>
+        <h1 className="font-inter font-semibold xs:text-2xl sm:text-3xl ">
+          Exclusive
+        </h1>
       </NavLink>
 
       {/* Navigation (Home, Contact, About, SignUp)  */}
-      <nav className="grow ">
-        <ul className="flex justify-evenly text-xl">
+      <nav className="grow hidden md:block">
+        <ul className="flex justify-evenly md:text-lg lg:text-xl">
           <li>
-            <NavLink to="home" className="">
+            <NavLink
+              to="home"
+              className={({ isActive, isPending }) =>
+                isPending
+                  ? "text-black"
+                  : isActive
+                  ? "text-orange-500"
+                  : "text-black"
+              }
+            >
               Home
             </NavLink>
           </li>
           <li>
-            <NavLink to="contact" className="">
+            <NavLink
+              to="contact"
+              className={({ isActive, isPending }) =>
+                isPending ? "text-black" : isActive ? "text-orange-500" : ""
+              }
+            >
               Contact
             </NavLink>
           </li>
           <li>
-            <NavLink to="about" className="">
+            <NavLink
+              to="about"
+              className={({ isActive, isPending }) =>
+                isPending ? "text-black" : isActive ? "text-orange-500" : ""
+              }
+            >
               About
             </NavLink>
           </li>
           <li>
-            <NavLink to="signup" className="">
+            <NavLink
+              to="signup"
+              className={({ isActive, isPending }) =>
+                isPending ? "text-black" : isActive ? "text-orange-500" : ""
+              }
+            >
               SignUp
             </NavLink>
           </li>
         </ul>
       </nav>
       <div className="flex items-end justify-end h-10 gap-7">
-        <div className="flex justify-between bg-gray-200 px-3 items-center rounded-sm">
+        {/*  Search Bar */}
+        <div className="justify-between bg-gray-200 px-3 items-center rounded-sm hidden lg:inline-block ">
           <input
             type="text"
             placeholder="What are you looking for?"
-            className="bg-transparent text-sm flex grow h-10 border-0 "
+            className="bg-transparent text-sm grow h-10 border-0 "
           />
           <FontAwesomeIcon icon={faMagnifyingGlass} className="size-5 pl-4" />
         </div>
+
         <div className="flex items-center h-full gap-10">
-          <FontAwesomeIcon icon={faHeart} className="size-5" />
-          <FontAwesomeIcon icon={faCartShopping} className="size-5 " />
-          {/* Account Log Icon */}
+          {/* Search Icon */}
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            className="size-5 pl-4 lg:hidden xs:hidden md:block"
+          />
+          {/* Burger Icon */}
+          <FontAwesomeIcon icon={faBars} className="size-5 md:hidden" />
+          {/* Wishlist Icon */}
+          <FontAwesomeIcon icon={faHeart} className="size-5 hidden 2xl:block" />
+          {/* Cart Icon */}
+          <FontAwesomeIcon
+            icon={faCartShopping}
+            className="size-5 hidden 2xl:block"
+          />
+
+          {/* Account */}
           <div>
             <button onClick={handleSubmit}>
-              <FontAwesomeIcon icon={faCircleUser} className="size-5" />
+              <FontAwesomeIcon icon={faCircleUser} className="size-5" />{" "}
+              {/* Account Icon */}
             </button>
             {click &&
               (isUserLoggedIn ? (
@@ -104,7 +148,8 @@ const Navbar = () => {
                   </a>
                   <button onClick={handleMyCart}>
                     <div className="my-3 px-5 flex items-center gap-4">
-                      <FontAwesomeIcon icon={faCircleUser} className="size-5" />
+                      <FontAwesomeIcon icon={faCircleUser} className="size-5" />{" "}
+                      {/* Cart Icon */}
                       <p className="text-base">My Cart</p>
                     </div>
                   </button>
@@ -114,7 +159,7 @@ const Navbar = () => {
                         icon={faBagShopping}
                         className="size-5"
                       />
-                      <p className="text-base">My Order</p>
+                      <p className="text-base">My Order</p> {/* Order Icon */}
                     </div>
                   </a>
                   <a href="" className="">
@@ -123,19 +168,21 @@ const Navbar = () => {
                         icon={faXmarkCircle}
                         className="size-5"
                       />
-                      <p className="text-base">My Cancellations</p>
+                      <p className="text-base">My Cancellations</p>{" "}
+                      {/* Cancel Icon */}
                     </div>
                   </a>
                   <a href="" className="">
                     <div className="my-3 px-5 flex items-center gap-4">
                       <FontAwesomeIcon icon={faStar} className="size-5" />
-                      <p className="text-base">My Reviews</p>
+                      <p className="text-base">My Reviews</p>{" "}
+                      {/* Review Icon */}
                     </div>
                   </a>
                   <button onClick={handleLogout}>
                     <div className="my-3 px-5 flex items-center gap-4">
                       <FontAwesomeIcon
-                        icon={faArrowRightFromBracket}
+                        icon={faArrowRightFromBracket} // Logout Icon
                         className="size-5"
                       />
                       <p className="text-base">Logout</p>
@@ -149,7 +196,8 @@ const Navbar = () => {
                       <FontAwesomeIcon
                         icon={faArrowRightFromBracket}
                         className="size-5"
-                      />
+                      />{" "}
+                      {/* Login Icon */}
                       <p className="text-base">Login</p>
                     </div>
                   </button>
