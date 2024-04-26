@@ -3,6 +3,7 @@ import Button from "../Components/Homepage/Button";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 const Cart = () => {
   const [cart, setCart] = useState([]); // Array to store all products in the cart
   const [total, setTotal] = useState(0); // Total price of all products in the cart
@@ -201,23 +202,19 @@ const Cart = () => {
           </button>
         </div>
       </div>
-      <div className="mt-10 flex justify-between ">
-        <div className="flex">
+      <div className="my-10 flex justify-between border">
+        <div className="flex border items-start">
           <input
             type="text"
-            height={3}
             width={20}
             placeholder="Coupon Code"
-            className="border-2 pl-10"
+            className="border-2 pl-10 h-12 border-black"
           />
-          <Button
-            title="Apply Coupon"
-            width="12"
-            height="3"
-            border={"border-2"}
-          />
+          <button>
+            <CartButton title="Apply Coupon" />
+          </button>
         </div>
-        <div className=" ml-80 px-4 border-4 w-full border-black">
+        <div className="ml-80 px-4 border-2 w-full border-black h-72">
           <p className="text-xl">Cart Total</p>
           <ul>
             <li className="flex items-center justify-between">
@@ -255,3 +252,15 @@ const Cart = () => {
 };
 
 export default Cart;
+
+// View Products Button
+export const CartButton = (props) => {
+  return (
+    <div className=" text-white bg-orange-500 border border-black">
+      {props.title}
+    </div>
+  );
+};
+CartButton.propTypes = {
+  title: PropTypes.string.isRequired,
+};

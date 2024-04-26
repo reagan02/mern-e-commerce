@@ -1,34 +1,40 @@
+import PropTypes from "prop-types";
+
 const FeaturesHighlight = () => {
   return (
-    <div className="mx-48 my-10 flex justify-between ">
-      <div className="py-2 flex flex-col items-center">
-        <div className="size-20 rounded-full">
-          <img src="../src/assests/Deliver.png" alt="" />
-        </div>
-
-        <div className="text-base font-semibold py-2">
-          FREE AND FAST DELIVERY
-        </div>
-        <div className="text-sm">Free delivery for all orders over $140 </div>
-      </div>
-      <div className="py-2 flex flex-col items-center">
-        <div className="size-20 rounded-full">
-          <img src="../src/assests/Cs.png" alt="" />
-        </div>
-        <div className="text-base font-semibold py-2">
-          24/7 CUSTOMER SERVICE
-        </div>
-        <div className="text-sm">Friendly 24/7 customer support </div>
-      </div>
-      <div className="py-2 flex flex-col items-center">
-        <div className="size-20 rounded-full">
-          <img src="../src/assests/Guarantee.png" alt="" />
-        </div>
-        <div className="text-base font-semibold py-2">MONEY BACK GUARANTEE</div>
-        <div className="text-sm">We reurn money within 30 days </div>
-      </div>
+    <div className=" md:my-10 sm:flex sm:flex-wrap sm:justify-between md:justify-evenly ">
+      <Box
+        title="FREE AND FAST DELIVERY"
+        desc="Free delivery for all orders over $140"
+      />
+      <Box title="MONEY BACK GUARANTEE" desc="We return money within 30 days" />
+      <Box title="24/7 SUPPORT" desc="We are available 24/7, 7 days a week" />
     </div>
   );
 };
 
 export default FeaturesHighlight;
+
+export const Box = (props) => {
+  return (
+    <div className="xs:py-5 md:py-2 flex flex-col items-center">
+      <img
+        src="../src/assests/Guarantee.png"
+        alt=""
+        className="size-16 lg:size-20 rounded-full"
+      />
+
+      <p className="xs:text-base md:text-sm lg:text-base font-semibold py-2">
+        {props.title}
+      </p>
+
+      <p className=" xs:text-sm md:text-xs lg:text-sm justify-center">
+        {props.desc}
+      </p>
+    </div>
+  );
+};
+Box.propTypes = {
+  title: PropTypes.string.isRequired,
+  desc: PropTypes.string.isRequired,
+};

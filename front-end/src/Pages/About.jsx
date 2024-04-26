@@ -10,17 +10,17 @@ import Person3 from "../assests/person3.png";
 import FeaturesHighlight from "../Components/Homepage/FeaturesHighlight";
 const About = () => {
   return (
-    <div className="mt-10">
-      <ul className="flex text-xl">
+    <div className="xs:my-4 sm:my-6 md:my-8 lg:my-10 ">
+      <ul className="flex xs:text-sm md:text-base lg:text-lg xl:text-xl">
         <li>
           <a href="">Home</a>
         </li>
-        <li className="px-3">/</li>
+        <li className="xs:px-1 md:px-3">/</li>
         <li>
           <a href="">About</a>
         </li>
       </ul>
-      <div className="flex justify-between my-14">
+      {/* <div className="flex justify-between my-14">
         <div className="flex flex-col justify-center mr-20">
           <p className="text-5xl font-inter font-semibold">Our Story</p>
           <p className="pt-10">
@@ -37,10 +37,10 @@ const About = () => {
           </p>
         </div>
         <img src={sideImage} alt="" />
-      </div>
+      </div> */}
 
       {/* About Card */}
-      <div className="mb-20 mt-36 flex justify-between">
+      {/* <div className="mb-20 mt-36 flex justify-between">
         <Aboutcard
           image={Services}
           number={10.5}
@@ -61,10 +61,10 @@ const About = () => {
           number={25}
           context="Annual gross sale in our site"
         />
-      </div>
+      </div> */}
 
       {/* Team Card */}
-      <div className=" mt-10 mb-28 flex justify-between">
+      {/* <div className=" mt-10 mb-28 flex justify-between">
         <Teamcard
           image={Person1}
           name="Tom Cruise"
@@ -80,12 +80,12 @@ const About = () => {
           name="Will Smith"
           position="Product Designer"
         />
-      </div>
+      </div> */}
 
       {/* Features Highlight */}
-      <div className="my-36">
+      {/* <div className="my-36">
         <FeaturesHighlight />
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -10,10 +10,8 @@ const Section = (props) => {
         {props.context}
         <div className="flex grow justify-end ">{props.component}</div>
       </div>
-      <div className="">{props.body}</div>
-      <div className="flex justify-center items-center my-10 w-full">
-        {props.showButton}
-      </div>
+      <div className="pt-4">{props.body}</div>
+      <div className=" flex justify-center py-10">{props.showButton}</div>
     </div>
   );
 };
