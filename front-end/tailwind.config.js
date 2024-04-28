@@ -26,6 +26,9 @@ export default {
         poppins: ["Poppins", "sans-serif"],
         inter: ["Inter", "sans-serif"],
       },
+      colors: {
+        "custom-red": "#DB4444",
+      },
     },
   },
   plugins: [],

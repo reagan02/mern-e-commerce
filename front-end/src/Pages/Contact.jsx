@@ -1,4 +1,3 @@
-import Button from "../Components/Homepage/Button";
 import icons_phone from "../assests/icons_phone.png";
 import icons_mail from "../assests/icons_mail.png";
 import PropTypes from "prop-types";

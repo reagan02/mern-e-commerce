@@ -1,8 +1,8 @@
 import log from "../../assests/log.png";
-import Button from "../../Components/Homepage/Button";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Inputs } from "../LogIn/Signup";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,7 +12,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   // POST request to log in
-  const submit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const isLoggedIn = sessionStorage.getItem("userID");
     if (isLoggedIn) {
@@ -35,56 +35,55 @@ const Login = () => {
     }
   };
   return (
-    <div>
-      <div className="flex my-10">
-        <div className=" border-2 w-1/2 h-1/6">
-          <img src={log} alt="" className=" " />
-        </div>
-        {/* Log In // SignUp*/}
-        <div className=" w-1/2 flex items-center justify-center">
-          {/* Log In */}
-          <div className="">
-            <h1 className="text-4xl font-inter font-semibold my-5">
-              Log In to Exclusive
-            </h1>
-            <p className="text-xl ">Enter your details below</p>
+    <div className="flex gap-1 xl:gap-5 xs:my-6 sm:my-8 lg:my-10 ">
+      <img src={log} alt="" className="hidden lg:block lg:w-7/12 xl:w-2/3" />
 
-            {/* POST FORM to log in */}
-            <form onSubmit={submit}>
-              {/* Email or Phone Number */}
-              <input
-                type="text"
-                placeholder="Email or Phone Number"
-                className="text-xl mt-20 outline-none"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <hr className="my-2" />
+      <div className=" w-full lg:ml-16 xl:ml-20 lg:mt-20 xl:mt-24">
+        {/* SignUp */}
+        <h1 className="text-xl md:text-2xl xl:text-4xl font-inter font-semibold my-4 lg:my-5 lg:tracking-wider">
+          Log in to Exclusive
+        </h1>
+        <p className="lg:text-lg xl:text-xl ">Enter your details below</p>
 
-              {/* Password */}
-              <input
-                type="password"
-                placeholder="Password"
-                className="text-xl mt-10 outline-none"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <hr className="my-2" />
-
-              {/* Display Email Error Message */}
-              {error && <p className="text-red-500">{error}</p>}
-
-              {/* Log In Button */}
-              <div className="flex justify-between items-center mt-5">
-                <button type="submit">
-                  <Button title="Log In" height="2.5" width="7" />
-                </button>
-                <a href="" className="text-orange-600 text-base">
-                  Forget Password?
-                </a>
-              </div>
-            </form>
+        {/* LOG IN FORM */}
+        <div className="flex flex-col xs:gap-5 md:gap-8 lg:gap-10 mt-8 lg:mt-10">
+          <div>
+            <Inputs
+              type="text"
+              placeholder="Email"
+              value={email}
+              function={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <hr className="my-2" />
           </div>
+          <div>
+            <Inputs
+              type="password"
+              placeholder="Password"
+              value={password}
+              function={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+            <hr className="my-2" />
+          </div>
+        </div>
+        {/* Display Email Error Message */}
+        {error && <p className="text-red-500">{error}</p>}
+
+        {/* Log In Button */}
+        <div className="flex gap-10 lg:justify-between items-center mt-5 lg:mb-0 mb-20">
+          <button
+            onClick={handleSubmit}
+            className="bg-orange-600 text-white tracking-wider xs:text-base lg:text-lg xl:text-xl px-6 py-2 rounded-md border-2"
+          >
+            Log In
+          </button>
+          <a href="" className="text-orange-600 text-base">
+            Forget Password?
+          </a>
         </div>
       </div>
     </div>

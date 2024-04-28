@@ -1,11 +1,10 @@
 import log from "../../assests/log.png";
-import Button from "../../Components/Homepage/Button";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { validateInput } from "./validation.js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import PropTypes from "prop-types";
 const Signup = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
@@ -55,97 +54,121 @@ const Signup = () => {
     }
   };
   return (
-    <div>
-      <div className="flex my-10">
-        <div className=" border-2 w-1/2 h-1/6">
-          <img src={log} alt="" className=" " />
-        </div>
-        <div className=" w-1/2 flex items-center justify-center">
-          {/* SignUp */}
-          <div className="">
-            <h1 className="text-4xl font-inter font-semibold my-5">
-              Create an Account
-            </h1>
-            <p className="text-xl ">Enter your details below</p>
+    <div className="flex gap-1 xl:gap-5 xs:my-6 sm:my-8 lg:my-10">
+      <img src={log} alt="" className="hidden lg:block lg:w-7/12 xl:w-2/3 " />
 
-            {/* POST FORM to create account */}
-            <form onSubmit={handleSubmit}>
-              {/* User Name */}
-              <input
-                type="text"
-                placeholder="Username"
-                className="text-xl mt-20 border-none w-80 outline-none"
-                value={userName}
-                onChange={(e) => {
-                  setUserName(e.target.value);
-                  setError((prevErrors) => ({ ...prevErrors, userName: null }));
-                }}
-              />
-              <hr className="my-2" />
-
-              {/* Display User Name Error Message */}
-              {error.name && <p className="text-red-500">{error.name}</p>}
-
-              {/* Email or Phone Number */}
-              <input
-                type="email"
-                placeholder="Email"
-                className="text-xl mt-10 border-none w-80 outline-none"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setError((prevErrors) => ({ ...prevErrors, email: null }));
-                }}
-              />
-              <hr className="my-2" />
-
-              {/* Display Email Error Message */}
-              {error.email && <p className="text-red-500">{error.email}</p>}
-
-              {/* Password */}
-              <input
-                type="password"
-                placeholder="Password"
-                className="text-xl mt-10 border-none w-80 outline-none"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setError((prevErrors) => ({ ...prevErrors, password: null }));
-                }}
-              />
-              <hr className="my-2" />
-
-              {/* Display Password Error Message */}
-              {error.password && (
-                <p className="text-red-500">{error.password}</p>
-              )}
-
-              <div className="mt-10">
-                <button type="submit">
-                  <Button title="Create Account" height="3" width="24" />
-                </button>
-              </div>
-            </form>
-
-            {/* Google Sign Up */}
-            <a
-              href=""
-              className="w-full flex justify-center border-2 text-xl mt-5 py-2"
-            >
-              Sign up with Google
-            </a>
-
-            {/* Redirect to Log in Page */}
-            <div className="flex justify-evenly mt-5">
-              <p>Aready have account?</p>
-              <NavLink to="/login">
-                <u className="font-semibold"> Log In</u>
-              </NavLink>
-            </div>
+      <div className=" w-full lg:ml-16  xl:ml-28 xl:mt-8">
+        {/* SignUp */}
+        <h1 className="text-xl md:text-2xl xl:text-4xl font-inter font-semibold my-4 lg:my-5 lg:tracking-wider">
+          Create an account
+        </h1>
+        <p className="lg:text-lg xl:text-xl ">Enter your details below</p>
+        {/* INPUTS TO CREATE ACCOUNT */}
+        <div className="flex flex-col xs:gap-5 md:gap-8 lg:gap-10 mt-8 lg:mt-10">
+          <div>
+            <Inputs
+              type="text"
+              placeholder="Username"
+              value={userName}
+              function={(e) => {
+                setUserName(e.target.value);
+                setError((prevErrors) => ({ ...prevErrors, userName: null }));
+              }}
+            />
+            <hr className="my-2" />
+            {/* Display Error Message */}
+            {error.name && <p className="text-red-500">{error.name}</p>}{" "}
           </div>
+          <div>
+            <Inputs
+              type="text"
+              placeholder="Email"
+              value={email}
+              function={(e) => {
+                setEmail(e.target.value);
+                setError((prevErrors) => ({ ...prevErrors, email: null }));
+              }}
+            />
+            <hr className="my-2" />
+            {/* Display Error Message */}
+            {error.email && <p className="text-red-500">{error.email}</p>}{" "}
+          </div>
+          <div>
+            <Inputs
+              type="password"
+              placeholder="Password"
+              value={password}
+              function={(e) => {
+                setPassword(e.target.value);
+                setError((prevErrors) => ({ ...prevErrors, password: null }));
+              }}
+            />
+            <hr className="my-2" />
+            {/* Display Error Message */}
+            {error.password && <p className="text-red-500">{error.password}</p>}
+          </div>
+          {/* BUTTONS */}
+
+          <div className="flex flex-col gap-5">
+            <Button
+              title="Sign Up"
+              bgColor="bg-orange-600"
+              textColor="text-white"
+              function={handleSubmit}
+            />
+            <Button
+              title="Sign up with Google"
+              bgColor="bg-white"
+              textColor="text-black"
+              function={handleSubmit}
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-4 lg:gap-0 lg:justify-evenly mt-5 lg:mb-0 mb-20">
+          <p>Aready have account?</p>
+          <NavLink to="/login">
+            <u className="font-semibold"> Log In</u>
+          </NavLink>
         </div>
       </div>
     </div>
   );
 };
 export default Signup;
+
+export const Inputs = (props) => {
+  return (
+    <input
+      type={props.type}
+      placeholder={props.placeholder}
+      className="text-base md:text-lg xl:text-xl w-full outline-none  "
+      value={props.value}
+      onChange={props.function}
+    />
+  );
+};
+
+Inputs.propTypes = {
+  type: PropTypes.oneOf(["text", "number", "password"]).isRequired,
+  value: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  function: PropTypes.func.isRequired,
+};
+
+export const Button = (props) => {
+  return (
+    <button
+      className={`${props.bgColor} ${props.textColor} xs:text-base lg:text-lg xl:text-xl w-full py-2 rounded-md border-2`}
+      onClick={props.function}
+    >
+      {props.title}
+    </button>
+  );
+};
+Button.propTypes = {
+  title: PropTypes.string.isRequired,
+  bgColor: PropTypes.string.isRequired,
+  textColor: PropTypes.string.isRequired,
+  function: PropTypes.func.isRequired,
+};

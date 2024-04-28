@@ -21,7 +21,9 @@
     "react-dom": "^18.2.0",
     "react-multi-carousel": "^2.8.5",
     "react-router-dom": "^6.21.3",
+    "react-slick": "^0.30.2",
     "router-react": "^0.0.1",
+    "slick-carousel": "^1.8.1",
     "tailwind": "^4.0.0"
   },
   "devDependencies": {

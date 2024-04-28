@@ -21,16 +21,14 @@ export const Box = (props) => {
       <img
         src="../src/assests/Guarantee.png"
         alt=""
-        className="size-16 lg:size-20 rounded-full"
+        className=" xs:size-10 sm:size-12 md:size-16 lg:size-20 rounded-full"
       />
 
-      <p className="xs:text-base md:text-sm lg:text-base font-semibold py-2">
+      <p className="xs:text-sm md:text-sm lg:text-base font-semibold py-2">
         {props.title}
       </p>
 
-      <p className=" xs:text-sm md:text-xs lg:text-sm justify-center">
-        {props.desc}
-      </p>
+      <p className=" xs:text-xs lg:text-sm justify-center">{props.desc}</p>
     </div>
   );
 };
