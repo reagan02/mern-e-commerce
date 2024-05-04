@@ -1,20 +1,22 @@
-import CartList from "../Components/Cart/CartList";
-import Button from "../Components/Homepage/Button";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import "./Cart.css";
+// Button Component is in this file also (can be found on the bottom part)
 const Cart = () => {
   const [cart, setCart] = useState([]); // Array to store all products in the cart
   const [total, setTotal] = useState(0); // Total price of all products in the cart
   const [shippingFee, setShippingFee] = useState(500); // Shipping fee
   const userID = sessionStorage.getItem("userID"); // Get the user ID from the session storage
+  const [isClicked, setIsClicked] = useState(false); // State to handle the "Delete" button
   const [updateCart, setUpdateCart] = useState({
     updateCart: false,
     updateCartText: "Update Cart",
   }); // State to handle the update cart button
 
   const handleUpdateCart = () => {
+    setIsClicked(!isClicked);
     setUpdateCart({
       updateCart: !updateCart.updateCart,
       updateCartText: updateCart.updateCart ? "Update Cart" : "Cancel",
@@ -110,22 +112,21 @@ const Cart = () => {
     navigate("/checkout");
   };
   return (
-    <div className="mt-10">
-      <div className="">
-        <ul className="flex text-xl">
-          <li>
-            <a href="">Home</a>
-          </li>
-          <li className="px-3">/</li>
-          <li>
-            <a href="">Cart</a>
-          </li>
-        </ul>
-      </div>
-      {/* Table */}
+    <div className="xs:my-4 sm:my-6 md:my-8 lg:my-10 ">
+      <ul className="flex xs:text-sm md:text-base lg:text-lg xl:text-xl">
+        <li>
+          <a href="">Home</a>
+        </li>
+        <li className="px-3">/</li>
+        <li>
+          <a href="">Cart</a>
+        </li>
+      </ul>
 
-      <div className="w-full mt-14">
-        <div className="flex w-full shadow-md mb-10 py-3 text-xl">
+      {/* DIsplay products  */}
+
+      <div className="hidden  lg:flex flex-col gap-5 xs:my-6 sm:my-8 md:my-10 lg:my-12 border-black border-b-2">
+        <div className="grid md:grid-cols-5 lg:grid-cols-4 text-base lg:text-lg xl:text-xl px-3 lg:px-5  py-3 lg:py-4  border-2 shadow-md rounded-md  ">
           {updateCart.updateCart && (
             <input
               type="checkbox"
@@ -134,117 +135,120 @@ const Cart = () => {
               checked={selectAll} // Check if the "Select All" checkbox should be checked
             />
           )}
-          <p className="w-1/4">Product</p>
-          <p className="w-1/4 ">Price</p>
-          <p className="w-1/4 ">Quantity</p>
-          <p className="w-1/4 ">Subtotal</p>
+          <p className="text-left md:col-span-2 lg:col-span-1">Product</p>
+          <p className="text-center ">Price</p>
+          <p className="text-center ">Quantity</p>
+          {/* <div className="flex justify-end border gap-36 lg:hidden ">
+            <p className="text-center">Price</p>
+            <p className="text-center">Quantity</p>
+          </div> */}
+          <p className="text-right ">Subtotal</p>
         </div>
-        <div className="w-full h-80 overflow-y-auto overscroll-contain">
+        <div className="flex flex-col justify-center shadow-md lg:shadow-none lg:border-none md:gap-5 lg:gap-7 xl:gap-10 h-96 overflow-auto scrollbar-hide">
           {/*  Display the products in the cart */}
           {cart.products &&
             cart.products.map((product, index) => (
-              <div key={`${product._id}-${index}`} className="flex">
+              <div
+                key={`${product._id}-${index}`}
+                className="border shadow-md rounded-md "
+              >
                 {updateCart.updateCart && (
-                  <input
-                    key={`${product._id}-${index}`}
-                    type="checkbox"
-                    className="mr-5"
-                    value={index}
-                    onChange={handleSelectCheckbox}
-                    checked={checkedValuesIndex.includes(index)} // Check if the checkbox should be checked
-                  />
+                  <div className="border border-black flex">
+                    <input
+                      key={`${product._id}-${index}`}
+                      type="checkbox"
+                      className="mx-3 border border-black"
+                      value={index}
+                      onChange={handleSelectCheckbox}
+                      checked={checkedValuesIndex.includes(index)} // Check if the checkbox should be checked
+                    />
+                    <CartList
+                      name={product.productName}
+                      price={product.price}
+                      quantity={product.quantity}
+                      image={product.image || ""}
+                    />
+                  </div>
                 )}
-                <CartList
-                  name={product.productName}
-                  price={product.price}
-                  quantity={product.quantity}
-                  image={product.image || ""}
-                />
               </div>
             ))}
         </div>
       </div>
 
-      <div className="mt-5 flex justify-between">
-        <button>
-          <Button
-            title="Return To Shop"
-            width="16"
-            height="4"
-            border={"border-2"}
-            textColor={"text-black"}
-            bgColor={"bg-white"}
-          />
-        </button>
-        <div className="flex gap-5">
-          {/* Delete Button */}
-          {updateCart.updateCart && (
-            <button onClick={handleDeleteCart}>
-              <Button
-                title={"Delete"}
-                width="16"
-                height="4"
-                border={"border-2"}
-                textColor={"text-white"}
-                bgColor={"bg-red-500"}
+      {/* Display products for mobile */}
+      <div className="lg:hidden flex flex-col gap-6 xs:my-6 sm:my-4 md:my-6 border-black border-b-2">
+        {cart.products &&
+          cart.products.map((product, index) => (
+            <div key={`${product._id}-${index}`} className="">
+              <CartListMobile
+                name={product.productName}
+                price={product.price}
+                quantity={product.quantity}
+                image={product.image || ""}
               />
+            </div>
+          ))}
+      </div>
+
+      {/* Return And Update /Delete */}
+      <div className="hidden md:flex justify-between">
+        <button className="border border-black w-52 py-4">
+          Return To Shop
+        </button>
+        <div className="flex gap-5 ">
+          {updateCart.updateCart && (
+            <button
+              onClick={handleDeleteCart}
+              className={`text-white bg-custom-red
+              }-500 border border-black w-52 py-4`}
+            >
+              Delete
             </button>
           )}
-          <button onClick={handleUpdateCart}>
-            <Button
-              title={updateCart.updateCartText}
-              width="16"
-              height="4"
-              border={"border-2"}
-              textColor={"text-black"}
-              bgColor={"bg-white"}
-            />
+
+          <button
+            onClick={handleUpdateCart}
+            className={`${
+              isClicked ? "bg-white" : "  text-white bg-custom-red"
+            } border border-black w-52 py-4`}
+          >
+            {updateCart.updateCartText}
           </button>
         </div>
       </div>
-      <div className="my-10 flex justify-between border">
-        <div className="flex border items-start">
+
+      {/* coupoun and proceed to checkout */}
+      <div className="flex md:justify-between flex-col gap-3 md:flex-row  py-5 lg:py-8 ">
+        <div className="flex justify-between gap-3 md:flex-wrap md:justify-normal flex-nowrap md:h-24">
           <input
             type="text"
-            width={20}
             placeholder="Coupon Code"
-            className="border-2 pl-10 h-12 border-black"
+            className="text-sm border border-black md:h-11 rounded-md pl-2 w-auto sm:pl-3 md:pl-4 md:w-48 lg:w-60 xl:w-80 lg:text-lg"
           />
-          <button>
-            <CartButton title="Apply Coupon" />
-          </button>
+          <Button title="Apply Coupon" />
         </div>
-        <div className="ml-80 px-4 border-2 w-full border-black h-72">
-          <p className="text-xl">Cart Total</p>
-          <ul>
-            <li className="flex items-center justify-between">
-              <p className="text-base">SubTotal</p>
-              <p className="text-base">${total}</p>
-            </li>
-            <hr className=" my-2" />
-            <li className="flex items-center justify-between">
-              <p className="text-base">Shipping Fee</p>
-              <p className="text-base">${shippingFee}</p>
-            </li>
-            <hr className=" my-2" />
+        <div className="border border-black p-2 md:p-4 flex flex-col gap-4 md:gap-6 lg:gap-8 md:w-1/2 xl:w-2/5">
+          <p className="md:text-lg xl:text-xl font-semibold">Cart Total</p>
+          <div className="flex flex-col gap-2 md:gap-3 md:gap-">
+            <div className="flex justify-between">
+              <p>SubTotal: </p>
+              <p>₱ {total.toLocaleString()}</p>
+            </div>
+            <hr className="border border-black" />
+            <div className="flex justify-between">
+              <p>Shipping: </p>
+              <p>₱ {shippingFee.toLocaleString()}</p>
+            </div>
+            <hr className="border border-black" />
+            <div className="flex justify-between">
+              <p>Total: </p>
+              <p>₱ {total.toLocaleString()}</p>
+            </div>
+          </div>
 
-            <hr className=" my-2" />
-            <li className="flex items-center justify-between">
-              <p className="text-base">Total</p>
-              <p className="text-base">${total + shippingFee}</p>
-            </li>
-          </ul>
-
-          <button onClick={checkout}>
-            <Button
-              title="Proceed To Checkout"
-              width="full"
-              height="3"
-              border={"border-2"}
-              textColor={"text-white"}
-              bgColor={"bg-orange-600"}
-            />
-          </button>
+          <div className="text-right">
+            <Button title="Proceed To Checkout" />
+          </div>
         </div>
       </div>
     </div>
@@ -262,5 +266,97 @@ export const CartButton = (props) => {
   );
 };
 CartButton.propTypes = {
+  title: PropTypes.string.isRequired,
+};
+
+export const CartList = (props) => {
+  const [quantity, setQuantity] = useState(props.quantity);
+
+  const handleQuantity = () => {
+    setQuantity(quantity);
+  };
+  return (
+    <div className="grid md:grid-cols-5 lg:grid-cols-4 px-3 lg:px-5 my-2">
+      <div className="flex gap-4 items-center text-left md:col-span-2 lg:col-span-1 ">
+        <img src={props.image} alt="" className="md:size-14 lg:size-16" />
+        <p className="lg:text-lg">{props.name}</p>
+      </div>
+      {/* Price */}
+      <p className="items-center justify-center lg:text-lg flex ">
+        ₱ {props.price.toLocaleString()}
+      </p>
+
+      {/* Quantity */}
+      <div className="items-center justify-center lg:text-lg flex ">
+        <input
+          type="number"
+          className=" w-10  "
+          value={quantity}
+          onChange={handleQuantity}
+        />
+      </div>
+
+      {/* Subtotal */}
+      <p className="flex  items-center justify-end  lg:text-lg ">
+        ₱ {(props.price * props.quantity).toLocaleString()}
+      </p>
+    </div>
+  );
+};
+
+CartList.propTypes = {
+  image: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  quantity: PropTypes.number.isRequired,
+  checkBox: PropTypes.bool.isRequired,
+};
+
+export const CartListMobile = (props) => {
+  return (
+    <div className="flex justify-between shadow-sm sm:p-2 md:p-4">
+      {/* image/name/desc */}
+      <div className="flex grow gap-4 items-center">
+        <img src={props.image} alt="" className="xs:size-16 sm:size-20 " />
+
+        <p className="xs:text-sm md:text-base">{props.name}</p>
+      </div>
+      {/* price/quantiy */}
+      <div className=" w-20 sm:w-24 flex flex-col justify-center gap-2">
+        <p className="xs:text-sm md:text-base text-right">
+          ₱ {props.price.toLocaleString()}
+        </p>
+        <div className="flex justify-end">
+          <button className=" border rounded-s-md bg-custom-red px-2 ">
+            -
+          </button>
+          <input
+            type="text"
+            className="xs:w-8 sm:w-14 xs:text-sm md:text-base text-center border "
+            value={props.quantity}
+          />
+          <button className="border rounded-e-md bg-custom-red px-2">+</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+CartListMobile.propTypes = {
+  image: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  quantity: PropTypes.number.isRequired,
+};
+
+export const Button = (props) => {
+  return (
+    <button className="border rounded-md text-sm text-white bg-custom-red px-4 py-2 md:text-base md:px-3 lg:px-8 md:py-0 lg:text-lg md:h-11">
+      {props.title}
+    </button>
+  );
+};
+
+Button.propTypes = {
   title: PropTypes.string.isRequired,
 };

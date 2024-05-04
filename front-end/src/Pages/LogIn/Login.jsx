@@ -46,45 +46,47 @@ const Login = () => {
         <p className="lg:text-lg xl:text-xl ">Enter your details below</p>
 
         {/* LOG IN FORM */}
-        <div className="flex flex-col xs:gap-5 md:gap-8 lg:gap-10 mt-8 lg:mt-10">
-          <div>
-            <Inputs
-              type="text"
-              placeholder="Email"
-              value={email}
-              function={(e) => {
-                setEmail(e.target.value);
-              }}
-            />
-            <hr className="my-2" />
+        <form onSubmit={handleSubmit}>
+          <div className="flex flex-col xs:gap-5 md:gap-8 lg:gap-10 mt-8 lg:mt-10">
+            <div>
+              <Inputs
+                type="text"
+                placeholder="Email"
+                value={email}
+                function={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+              <hr className="my-2" />
+            </div>
+            <div>
+              <Inputs
+                type="password"
+                placeholder="Password"
+                value={password}
+                function={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+              <hr className="my-2" />
+            </div>
           </div>
-          <div>
-            <Inputs
-              type="password"
-              placeholder="Password"
-              value={password}
-              function={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-            <hr className="my-2" />
-          </div>
-        </div>
-        {/* Display Email Error Message */}
-        {error && <p className="text-red-500">{error}</p>}
+          {/* Display Email Error Message */}
+          {error && <p className="text-red-500">{error}</p>}
 
-        {/* Log In Button */}
-        <div className="flex gap-10 lg:justify-between items-center mt-5 lg:mb-0 mb-20">
-          <button
-            onClick={handleSubmit}
-            className="bg-orange-600 text-white tracking-wider xs:text-base lg:text-lg xl:text-xl px-6 py-2 rounded-md border-2"
-          >
-            Log In
-          </button>
-          <a href="" className="text-orange-600 text-base">
-            Forget Password?
-          </a>
-        </div>
+          {/* Log In Button */}
+          <div className="flex gap-10 lg:justify-between items-center mt-5 lg:mb-0 mb-20">
+            <button
+              type="submit"
+              className="bg-orange-600 text-white tracking-wider xs:text-base lg:text-lg xl:text-xl px-6 py-2 rounded-md border-2"
+            >
+              Log In
+            </button>
+            <a href="" className="text-orange-600 text-base">
+              Forget Password?
+            </a>
+          </div>
+        </form>
       </div>
     </div>
   );
