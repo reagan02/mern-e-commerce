@@ -14,7 +14,7 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [subtotalPrice, setSubtotalPrice] = useState(0);
   const totalPrice = subtotalPrice + shippingFee;
-  const coupunCode = "sampleCode";
+  const couponCode = "sampleCode";
   const [cartData, setCartData] = useState({});
   // locations state from the product page
   // Initialize the refs
@@ -82,7 +82,7 @@ const Checkout = () => {
             billingDetails,
             orderItems,
             totalPrice,
-            coupunCode,
+            couponCode: couponCode,
             paymentMethod,
           }
         );
@@ -102,7 +102,7 @@ const Checkout = () => {
             billingDetails,
             orderItems: cartData.products,
             totalPrice,
-            coupunCode,
+            couponCode: couponCode,
             paymentMethod,
           }
         );
@@ -111,7 +111,7 @@ const Checkout = () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Error Occured");
+      alert("Error Occurred");
     }
   };
 
@@ -284,6 +284,7 @@ const Checkout = () => {
             className="mr-32  overflow-y-auto"
             style={{ maxHeight: "288px" }}
           >
+            
             {locationState && (
               <ItemList
                 image={productData.image}

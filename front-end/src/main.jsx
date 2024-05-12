@@ -2,10 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import {
-  Route,
-  RouterProvider,
-  createBrowserRouter,
-  createRoutesFromElements,
+	Route,
+	RouterProvider,
+	createBrowserRouter,
+	createRoutesFromElements,
 } from "react-router-dom";
 import Mainpage from "./Pages/Mainpage";
 import Homepage from "./Pages/Homepage";
@@ -20,26 +20,26 @@ import Productpage from "./Pages/Productpage";
 import Wishlist from "./Pages/Wishlist";
 
 const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route>
-      <Route path="/" element={<Mainpage />}>
-        <Route path="home" element={<Homepage />} />
-        <Route path="contact" element={<Contact />} />
-        <Route path="login" element={<Login />} />
-        <Route path="signup" element={<Signup />} />
-        <Route path="about" element={<About />} />
-        <Route path="cart" element={<Cart />} />
-        <Route path="*" element={<NotFound />} />
-        <Route path="checkout" element={<Checkout />} />
-        <Route path="product/:id" element={<Productpage />} />
-        <Route path="wishlist" element={<Wishlist />} />
-      </Route>
-    </Route>
-  )
+	createRoutesFromElements(
+		<Route>
+			<Route path="/" element={<Mainpage />}>
+				<Route path="home" element={<Homepage />} />
+				<Route path="contact" element={<Contact />} />
+				<Route path="login" element={<Login />} />
+				<Route path="signup" element={<Signup />} />
+				<Route path="about" element={<About />} />
+				<Route path="cart" element={<Cart />} />
+				<Route path="*" element={<NotFound />} />
+				<Route path="checkout" element={<Checkout />} />
+				<Route path="product/:id" element={<Productpage />} />
+				<Route path="wishlist" element={<Wishlist />} />
+			</Route>
+		</Route>
+	)
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+	// <React.StrictMode>
+	<RouterProvider router={router} />
+	// </React.StrictMode>
 );
