@@ -2,7 +2,7 @@ import deliver from "../assests//icon-delivery.png";
 import iconreturn from "../assests/Icon-return.png";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,6 @@ const Productpage = () => {
 	const { id } = useParams(); // id
 	const [variantIndex, setVariantIndex] = useState(0); // variant
 	const [colorIndex, setColorIndex] = useState(0); // color
-	const [quantity, setQuantity] = useState(1); // quantity
 	const userID = sessionStorage.getItem("userID");
 
 	//settings for slider
@@ -39,29 +38,46 @@ const Productpage = () => {
 		fetchData();
 	}, [id]);
 
+	const [state, dispatch] = useReducer(counterReducer, { quantity: 1 });
+	function counterReducer(state, action) {
+		switch (action.type) {
+			case "increment":
+				if (state.quantity < action.stock) {
+					return { quantity: state.quantity + 1 };
+				}
+				return state;
+			case "decrement":
+				if (state.quantity > 1) {
+					return { quantity: state.quantity - 1 };
+				}
+				return state;
+			case "reset":
+				return { quantity: 1 };
+			case "set":
+				return { quantity: action.quantity };
+			default:
+				throw new Error();
+		}
+	}
 	// Increment Quantity
 	const incrementQuantity = () => {
-		if (quantity < data.variants[variantIndex].stock) {
-			setQuantity(quantity + 1);
-		}
+		dispatch({ type: "increment", stock: data.variants[variantIndex].stock });
 	};
 
 	// Decrement Quantity
 	const decrementQuantity = () => {
-		if (quantity >= 1) {
-			setQuantity(quantity - 1);
-		} else {
-			alert("Out of Stock");
-		}
+		dispatch({ type: "decrement" });
 	};
 	const productData = {
 		productID: id,
 		productName: data && data.name,
 		size: data && data.variants && data.variants[variantIndex].size,
 		price: data && data.variants && data.variants[variantIndex].price,
-		quantity: quantity,
+		variantIndex: variantIndex,
+		quantity: state.quantity,
 		image: data && data.images && data.images[0],
 	};
+
 	// Add to Cart
 	const handleCart = async () => {
 		try {
@@ -69,16 +85,12 @@ const Productpage = () => {
 				userID,
 				productData,
 			});
-			setQuantity(1);
 			alert(res.data.message);
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
-	const handleQuantity = () => {
-		setQuantity(quantity);
-	};
 	return (
 		<div className="xs:my-4 sm:my-6 md:my-8 lg:my-10 ">
 			<ul className="flex xs:text-sm md:text-base lg:text-lg xl:text-xl">
@@ -221,7 +233,7 @@ const Productpage = () => {
 											} px-2 md:px-3 py-1 md:text-base text-sm rounded-md`}
 											onClick={() => {
 												setVariantIndex(index);
-												setQuantity(1);
+												dispatch({ type: "reset" });
 											}}
 										>
 											{variant.size}
@@ -242,10 +254,12 @@ const Productpage = () => {
 								-
 							</button>
 							<input
-								type="text"
+								type="number"
 								className="border w-14 md:w-20 text-base md:text-2xl border-black h-9 md:h-10 lg:h-11 xl:h-12 text-center"
-								value={quantity}
-								onChange={handleQuantity}
+								value={state.quantity}
+								onChange={() => {
+									dispatch({ type: "set" });
+								}}
 							/>
 							<button
 								className="size-9 md:size-10 lg:size-11  xl:size-12 lg:text-2xl xl:text-3xl lg:hover:text-white lg:hover:bg-custom-red lg:border border-black rounded-e-md bg-custom-red lg:bg-transparent"
@@ -261,7 +275,7 @@ const Productpage = () => {
 								navigate("/checkout", {
 									state: {
 										productID: id,
-										quantity: quantity,
+										quantity: state.quantity,
 										size: variantIndex,
 										from: `product${id}`,
 									},
