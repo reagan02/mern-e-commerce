@@ -1,12 +1,11 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import "./Cart.css";
 
 const Cart = () => {
-	const [cart, setCart] = useState([]);
+	const [cart, setCart] = useState({ id: "", userID: "", products: [] });
 	const [total, setTotal] = useState(0);
 	const [shippingFee, setShippingFee] = useState(500);
 	const userID = sessionStorage.getItem("userID");
@@ -15,7 +14,7 @@ const Cart = () => {
 		updateCart: false,
 		updateCartText: "Update Cart",
 	});
-
+	const [stock, setStock] = useState([]);
 	const [checkedValuesIndex, setCheckedValuesIndex] = useState([]); // Array to store the checked values
 
 	const toggleCheckbox = (event, index) => {
@@ -26,9 +25,7 @@ const Cart = () => {
 		}
 		setCheckedValuesIndex((prev) => prev.filter((item) => item !== index));
 	};
-
 	const [selectAll, setSelectAll] = useState(false);
-
 	// Function to handle select all checkbox change
 	const toggleSelectAll = (event) => {
 		if (event.target.checked) {
@@ -49,6 +46,10 @@ const Cart = () => {
 			updateCart: !updateCart.updateCart,
 			updateCartText: updateCart.updateCart ? "Update Cart" : "Cancel",
 		});
+	};
+
+	const toggleCoupon = () => {
+		console.log(stock);
 	};
 	const deleteCart = async () => {
 		const checkedCartItems = checkedValuesIndex.map(
@@ -75,13 +76,18 @@ const Cart = () => {
 						updateCart: false,
 						updateCartText: "Update Cart",
 					});
-					alert("Item deleted successfully");
 				} catch {
 					alert("Error deleting item");
 				}
 			}
 		}
+		alert("Item deleted successfully");
 	};
+
+	// change quantity
+	const [quantity, setQuantity] = useState([]);
+	const increment = (productID, index) => {};
+	console.log(cart);
 	useEffect(() => {
 		const fetchCart = async () => {
 			if (!userID) {
@@ -99,6 +105,17 @@ const Cart = () => {
 					});
 					setTotal(newTotal);
 				}
+				const quantity = cart.products.map((product) => product.quantity);
+				setQuantity(quantity);
+				const stocks = await Promise.all(
+					cart.products.map(async (product) => {
+						const response = await axios.get(
+							`http://localhost:4000/api/cart/products/${product.productID}/variants/${product.variantIndex}`
+						);
+						return response.data.stock;
+					})
+				);
+				setStock(stocks);
 			} catch (error) {
 				console.log(error);
 			}
@@ -168,16 +185,20 @@ const Cart = () => {
 										<CartList
 											name={product.productName}
 											price={product.price}
-											quantity={product.quantity}
+											quantity={2}
 											image={product.image || ""}
+											stock={stock[index]}
+											increment={() => increment(product.productID, index)}
 										/>
 									</div>
 								) : (
 									<CartList
 										name={product.productName}
 										price={product.price}
-										quantity={product.quantity}
+										quantity={quantity[index]}
 										image={product.image || ""}
+										stock={stock[index]}
+										increment={() => increment(product.productID, index)}
 									/>
 								)}
 							</div>
@@ -235,7 +256,7 @@ const Cart = () => {
 						placeholder="Coupon Code"
 						className="text-sm border border-black md:h-11 rounded-md pl-2 w-auto sm:pl-3 md:pl-4 md:w-48 lg:w-60 xl:w-80 lg:text-lg"
 					/>
-					<Button title="Apply Coupon" />
+					<Button title="Apply Coupon" function={toggleCoupon} />
 				</div>
 				<div className="border border-black p-2 md:p-4 flex flex-col gap-4 md:gap-6 lg:gap-8 md:w-1/2 xl:w-2/5">
 					<p className="md:text-lg xl:text-xl font-semibold">Cart Total</p>
@@ -280,12 +301,6 @@ CartButton.propTypes = {
 };
 
 export const CartList = (props) => {
-	const [quantity, setQuantity] = useState(props.quantity);
-
-	const handleQuantity = (event) => {
-		setQuantity(event.target.value);
-	};
-
 	return (
 		<div className="grid md:grid-cols-5 lg:grid-cols-4 px-3 lg:px-5 my-2  w-full">
 			<div className="flex gap-4 items-center text-left md:col-span-2 lg:col-span-1 ">
@@ -298,19 +313,32 @@ export const CartList = (props) => {
 			</p>
 
 			{/* Quantity */}
-			<div className="items-center justify-center lg:text-lg flex ">
-				<button className="border text-center text-xl px-2 text-white bg-custom-red rounded-s-md">
-					+
-				</button>
-				<input
-					type="number"
-					className=" w-10 border text-center	  "
-					value={quantity}
-					onChange={handleQuantity}
-				/>
-				<button className="border text-center text-xl px-2 text-white bg-custom-red rounded-e-md">
-					-
-				</button>
+
+			<div className="flex flex-col items-center lg:text-lg ">
+				<p className="text-xs py-1">
+					<i>stocks left: {props.stock}</i>
+				</p>
+				<div>
+					<button
+						onClick={props.increment}
+						className="border text-center text-xl px-2 text-white bg-custom-red rounded-s-md"
+					>
+						+
+					</button>
+
+					<input
+						type="number"
+						className=" w-10 border text-center	  "
+						value={props.quantity}
+						onChange={(e) => {
+							e.target.value = props.quantity;
+						}}
+					/>
+
+					<button className="border text-center text-xl px-2 text-white bg-custom-red rounded-e-md">
+						-
+					</button>
+				</div>
 			</div>
 
 			{/* Subtotal */}
@@ -327,6 +355,8 @@ CartList.propTypes = {
 	price: PropTypes.number.isRequired,
 	quantity: PropTypes.number.isRequired,
 	checkBox: PropTypes.bool.isRequired,
+	stock: PropTypes.number.isRequired,
+	increment: PropTypes.func.isRequired,
 };
 
 export const CartListMobile = (props) => {
@@ -343,16 +373,25 @@ export const CartListMobile = (props) => {
 				<p className="xs:text-sm md:text-base text-right">
 					₱ {props.price.toLocaleString()}
 				</p>
-				<div className="flex justify-end">
-					<button className=" border rounded-s-md bg-custom-red px-2 ">
-						-
-					</button>
-					<input
-						type="text"
-						className="xs:w-8 sm:w-14 xs:text-sm md:text-base text-center border "
-						value={props.quantity}
-					/>
-					<button className="border rounded-e-md bg-custom-red px-2">+</button>
+				<div>
+					<div className="flex justify-end">
+						<button className=" border rounded-s-md bg-custom-red px-2 ">
+							-
+						</button>
+
+						<input
+							type="text"
+							className="xs:w-8 sm:w-14 xs:text-sm md:text-base text-center border "
+							value={props.quantity}
+						/>
+
+						<button className="border rounded-e-md bg-custom-red px-2">
+							+
+						</button>
+					</div>
+					<p className="text-xs py-1">
+						<i>stocks left: {props.stock}</i>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -364,6 +403,7 @@ CartListMobile.propTypes = {
 	name: PropTypes.string.isRequired,
 	price: PropTypes.number.isRequired,
 	quantity: PropTypes.number.isRequired,
+	stock: PropTypes.number.isRequired,
 };
 
 export const Button = (props) => {
