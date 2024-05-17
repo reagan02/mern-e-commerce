@@ -1,9 +1,10 @@
 import Arrow from "../Components/Homepage/Arrow";
-import { ViewButton, ViewButton2 } from "../Components/Homepage/Button";
+import ViewButton, { ViewButton2 } from "../Components/Homepage/Button";
 import Subtitle from "../Components/Homepage/Subtitle";
 import Title from "../Components/Homepage/Title";
 import CategoryNav from "../Components/Navbar/CategoryNav";
 import Section from "../Components/Homepage/Section";
+import Section1 from "../Components/Homepage/Section1";
 import Category from "../Components/Homepage/Category";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -39,19 +40,19 @@ const Homepage = () => {
 			<CategoryNav />
 
 			{/* Flash Sales Section */}
-			<Section
-				subtitle={<Subtitle subtitle="Today's" />}
-				title={<Title title="Flash Sales" />}
-				context={<Countdown />}
-				component={<Arrow />}
-				body={<DisplayProducts productsCategory="Electronics" />}
-				showButton={<ViewButton />}
+			<Section1
+				subtitle={"Today's"}
+				title={"Flash Sales"}
+				countdown={true}
+				productsCategory={"Electronics"}
+				arrowOrButton={true}
 			/>
+			{/* PS: Always check the section props to avoid confusion of the propsTypes used */}
 			<hr className="" />
 			{/* Categories */}
 			<Section
-				subtitle={<Subtitle subtitle="Categories" />}
-				title={<Title title="Browse By Category" />}
+				subtitle="Categories"
+				title="Browse By Category"
 				body={
 					<div className="flex flex-wrap gap-5 xs:justify-center sm:justify-between pt-5">
 						<Category category="Phones" icon={faMobileButton} />
@@ -62,37 +63,26 @@ const Homepage = () => {
 						<Category category="Gaming" icon={faGamepad} />
 					</div>
 				}
-				component={<Arrow />}
 			/>
-			<hr className="" />
+			<hr className="xs:mt-7 md:mt-14" />
 			{/* Best Selling Products */}
-			<Section
-				subtitle={<Subtitle subtitle="This Month" />}
-				title={<Title title="Best Selling Products" />}
-				component={
-					<button className="">
-						<ViewButton2 />
-					</button>
-				}
-				body={<DisplayProducts productsCategory="Smartphone" />}
+			<Section1
+				subtitle="This Month"
+				title="Best Selling Products"
+				productsCategory="Smartphone"
 			/>
 			<hr />
 			<Billboard1 />
 			{/* Explore our products Section */}
-			<Section
-				subtitle={<Subtitle subtitle="Our Products" />}
-				title={<Title title="Explore Our Products" />}
-				component={<Arrow />}
-				body={<DisplayProducts productsCategory="Electronics" />}
-				showButton={
-					<button>
-						<ViewButton />
-					</button>
-				}
+			<Section1
+				subtitle="Our Products"
+				title="Explore Our Products"
+				arrowOrButton={true} // set true for arrowButton and false for viewButton
+				productsCategory="Electronics"
 			/>
 			<Section
-				subtitle={<Subtitle subtitle="Featured" />}
-				title={<Title title="New Arrival" />}
+				subtitle="Featured"
+				title="New Arrival"
 				body={
 					<div className="grid xs:grid-cols-2 xs:grid-rows-2  md:grid-cols-4 md:grid-rows-2 xs:gap-5 md::gap-8 lg:gap-10">
 						<div className=" md:col-span-2 md:row-span-2">
@@ -116,3 +106,18 @@ const Homepage = () => {
 };
 
 export default Homepage;
+
+// Context API is used to work the arrow buttons for the slide
+// The tree structure of the components is as follows:
+// Homepage
+// 	Section1Context -> (initialize the context)
+// 	Section1 -> (main section of the homepage, parent of the Context Provider)
+// 		DisplayProducts -> (this is where the slider and displaying products is done)
+// 			ItemCard
+// 		Arrow -> (it has functions to handle the slide)
+// 		Section1Context
+// 		Countdown
+// 		Subtitle
+// 		Title
+// 		ViewButton
+// 		Slider
