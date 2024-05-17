@@ -5,6 +5,7 @@ const {
   getCart,
   deleteCart,
   getSingleCart,
+  getStock
 } = require("../controller/cartController");
 
 const router = express.Router("");
@@ -18,5 +19,7 @@ router.get("/", getCart);
 router.get("/user", getSingleCart);
 
 router.delete("/:id", deleteCart);
+
+router.get("/products/:id/variants/:variantIndex", getStock);
 
 module.exports = router;

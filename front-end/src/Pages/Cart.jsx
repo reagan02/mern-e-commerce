@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -7,7 +7,7 @@ import "./Cart.css";
 const Cart = () => {
 	const [cart, setCart] = useState({ id: "", userID: "", products: [] });
 	const [total, setTotal] = useState(0);
-	const [shippingFee, setShippingFee] = useState(500);
+	const shippingFee = 150;
 	const userID = sessionStorage.getItem("userID");
 	const [isClicked, setIsClicked] = useState(false);
 	const [updateCart, setUpdateCart] = useState({
@@ -16,7 +16,6 @@ const Cart = () => {
 	});
 	const [stock, setStock] = useState([]);
 	const [checkedValuesIndex, setCheckedValuesIndex] = useState([]); // Array to store the checked values
-
 	const toggleCheckbox = (event, index) => {
 		setSelectAll(false);
 		if (event.target.checked) {
@@ -49,7 +48,7 @@ const Cart = () => {
 	};
 
 	const toggleCoupon = () => {
-		console.log(stock);
+		//console.log(stock);
 	};
 	const deleteCart = async () => {
 		const checkedCartItems = checkedValuesIndex.map(
@@ -84,10 +83,34 @@ const Cart = () => {
 		alert("Item deleted successfully");
 	};
 
-	// change quantity
-	const [quantity, setQuantity] = useState([]);
-	const increment = (productID, index) => {};
-	console.log(cart);
+	const increment = (index) => {
+		if (cart.products[index].quantity < stock[index]) {
+			setCart((prev) => {
+				const newCart = { ...prev };
+				newCart.products[index].quantity = newCart.products[index].quantity + 1;
+				let newTotal = 0;
+				newCart.products.forEach((product) => {
+					newTotal += product.price * product.quantity;
+				});
+				setTotal(newTotal);
+				return newCart;
+			});
+		}
+	};
+	const decrement = (index) => {
+		if (cart.products[index].quantity > 1) {
+			setCart((prev) => {
+				const newCart = { ...prev };
+				newCart.products[index].quantity = newCart.products[index].quantity - 1;
+				let newTotal = 0;
+				newCart.products.forEach((product) => {
+					newTotal += product.price * product.quantity;
+				});
+				setTotal(newTotal);
+				return newCart;
+			});
+		}
+	};
 	useEffect(() => {
 		const fetchCart = async () => {
 			if (!userID) {
@@ -97,37 +120,47 @@ const Cart = () => {
 				const response = await axios.get(
 					`http://localhost:4000/api/cart/user?userID=${userID}`
 				);
-				setCart(response.data.response);
-				if (cart.products) {
-					let newTotal = 0;
-					cart.products.map((products) => {
-						newTotal += products.price * products.quantity;
+				const cartData = response.data.response;
+				setCart(cartData);
+
+				if (cartData.products) {
+					const fetchProduct = new Promise((resolve) => {
+						let newTotal = 0;
+						cartData.products.map((product) => {
+							newTotal += product.price * product.quantity;
+						});
+						resolve(newTotal);
 					});
+
+					const stocksPromise = Promise.all(
+						cartData.products.map(async (product) => {
+							const response = await axios.get(
+								`http://localhost:4000/api/cart/products/${product.productID}/variants/${product.variantIndex}`
+							);
+							return response.data.stock;
+						})
+					);
+
+					const [newTotal, stocks] = await Promise.all([
+						fetchProduct,
+						stocksPromise,
+					]);
+
 					setTotal(newTotal);
+					setStock(stocks);
 				}
-				const quantity = cart.products.map((product) => product.quantity);
-				setQuantity(quantity);
-				const stocks = await Promise.all(
-					cart.products.map(async (product) => {
-						const response = await axios.get(
-							`http://localhost:4000/api/cart/products/${product.productID}/variants/${product.variantIndex}`
-						);
-						return response.data.stock;
-					})
-				);
-				setStock(stocks);
 			} catch (error) {
 				console.log(error);
 			}
 		};
 		fetchCart();
-	}, [cart, userID]);
+	}, [userID]);
 
 	const navigate = useNavigate();
 	const checkout = () => {
-		navigate("/checkout");
+		console.log(cart);
+		navigate("/checkout", { state: { cartQuantity: cart } });
 	};
-
 	return (
 		<div className="xs:my-4 sm:my-6 md:my-8 lg:my-10 ">
 			<ul className="flex xs:text-sm md:text-base lg:text-lg xl:text-xl">
@@ -185,20 +218,22 @@ const Cart = () => {
 										<CartList
 											name={product.productName}
 											price={product.price}
-											quantity={2}
+											quantity={cart.products[index].quantity} // Pass the updated quantity from the cart state
 											image={product.image || ""}
 											stock={stock[index]}
-											increment={() => increment(product.productID, index)}
+											increment={() => increment(index)}
+											decrement={() => decrement(index)}
 										/>
 									</div>
 								) : (
 									<CartList
 										name={product.productName}
 										price={product.price}
-										quantity={quantity[index]}
-										image={product.image || ""}
+										quantity={cart.products[index].quantity} // Pass the updated quantity from the cart state
 										stock={stock[index]}
-										increment={() => increment(product.productID, index)}
+										image={product.image || ""}
+										increment={() => increment(index)}
+										decrement={() => decrement(index)}
 									/>
 								)}
 							</div>
@@ -273,7 +308,7 @@ const Cart = () => {
 						<hr className="border border-black" />
 						<div className="flex justify-between">
 							<p>Total: </p>
-							<p>₱ {total.toLocaleString()}</p>
+							<p>₱ {(total + shippingFee).toLocaleString()}</p>
 						</div>
 					</div>
 
@@ -301,6 +336,7 @@ CartButton.propTypes = {
 };
 
 export const CartList = (props) => {
+	//const [quantity, setQuantity] = useState(props.quantity);
 	return (
 		<div className="grid md:grid-cols-5 lg:grid-cols-4 px-3 lg:px-5 my-2  w-full">
 			<div className="flex gap-4 items-center text-left md:col-span-2 lg:col-span-1 ">
@@ -328,14 +364,15 @@ export const CartList = (props) => {
 
 					<input
 						type="number"
-						className=" w-10 border text-center	  "
+						className=" w-10 border text-center outline-none "
 						value={props.quantity}
-						onChange={(e) => {
-							e.target.value = props.quantity;
-						}}
+						readOnly
 					/>
 
-					<button className="border text-center text-xl px-2 text-white bg-custom-red rounded-e-md">
+					<button
+						onClick={props.decrement}
+						className="border text-center text-xl px-2 text-white bg-custom-red rounded-e-md"
+					>
 						-
 					</button>
 				</div>
@@ -354,12 +391,13 @@ CartList.propTypes = {
 	name: PropTypes.string.isRequired,
 	price: PropTypes.number.isRequired,
 	quantity: PropTypes.number.isRequired,
-	checkBox: PropTypes.bool.isRequired,
-	stock: PropTypes.number.isRequired,
+	stock: PropTypes.number,
 	increment: PropTypes.func.isRequired,
+	decrement: PropTypes.func.isRequired,
 };
 
 export const CartListMobile = (props) => {
+	const [quantity, setQuantity] = useState(props.quantity);
 	return (
 		<div className="flex justify-between shadow-sm sm:p-2 md:p-4">
 			{/* image/name/desc */}
@@ -368,7 +406,7 @@ export const CartListMobile = (props) => {
 
 				<p className="xs:text-sm md:text-base">{props.name}</p>
 			</div>
-			{/* price/quantiy */}
+
 			<div className=" w-20 sm:w-24 flex flex-col justify-center gap-2">
 				<p className="xs:text-sm md:text-base text-right">
 					₱ {props.price.toLocaleString()}
@@ -382,7 +420,10 @@ export const CartListMobile = (props) => {
 						<input
 							type="text"
 							className="xs:w-8 sm:w-14 xs:text-sm md:text-base text-center border "
-							value={props.quantity}
+							value={quantity}
+							onChange={(e) => {
+								setQuantity(e.target.value);
+							}}
 						/>
 
 						<button className="border rounded-e-md bg-custom-red px-2">
@@ -403,7 +444,7 @@ CartListMobile.propTypes = {
 	name: PropTypes.string.isRequired,
 	price: PropTypes.number.isRequired,
 	quantity: PropTypes.number.isRequired,
-	stock: PropTypes.number.isRequired,
+	stock: PropTypes.number,
 };
 
 export const Button = (props) => {

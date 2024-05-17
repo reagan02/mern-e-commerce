@@ -37,10 +37,17 @@ const addProduct = async (req, res) => {
   }
 };
 
-// Get all products
-const getProducts = async (req, res) => {
+// Get all products by category
+const getProductsByCategory = async (req, res) => {
   try {
-    const products = await ProductModel.find({});
+    const category = req.query.category;
+    let products = [];
+
+    if (category) {
+      products = await ProductModel.find({ category: category });
+    } else {
+      products = await ProductModel.find({});
+    }
 
     res.status(200).json(products);
   } catch (error) {
@@ -101,7 +108,7 @@ const countProducts = async (req, res) => {
 // Exports all functions
 module.exports = {
   addProduct,
-  getProducts,
+  getProductsByCategory,
   getSingleProduct,
   deleteProduct,
   countProducts,

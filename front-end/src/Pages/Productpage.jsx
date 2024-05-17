@@ -244,7 +244,7 @@ const Productpage = () => {
 					</div>
 
 					{/* quantity and checkout */}
-					<div className="flex flex-wrap justify-normal gap-5 xl:gap-0 xl:justify-between py-3">
+					<div className="flex flex-wrap justify-normal gap-5 xl:gap-5 xl:justify-between py-3">
 						{/* Quantity */}
 						<div className="flex ">
 							<button
@@ -281,7 +281,7 @@ const Productpage = () => {
 									},
 								});
 							}}
-							className="text-center md:text-lg lg:text-xl px-5 md:px-14 md:py-2 h-9 md:h-10 bg-custom-red text-white rounded-md"
+							className="text-center md:text-lg lg:text-xl px-5 md:px-14 md:py-2 h-9 md:h-11 bg-custom-red text-white rounded-md"
 						>
 							Buy Now
 						</button>

@@ -2,7 +2,7 @@ const express = require("express");
 
 const {
   addProduct,
-  getProducts,
+  getProductsByCategory,
   deleteProduct,
   countProducts,
   getSmartphone,
@@ -15,7 +15,7 @@ const router = express.Router();
 router.post("/", addProduct);
 
 // Get all products
-router.get("/", getProducts);
+router.get("/category", getProductsByCategory);
 
 // Get a single products
 router.get("/:id", getSingleProduct);
