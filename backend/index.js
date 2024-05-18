@@ -15,7 +15,7 @@ app.use(cors({
   methods: ['GET', 'POST'], 
   credentials: true,
 }));
-
+// app.use(cors());
 // express session
 app.use(
   session({
