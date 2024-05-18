@@ -17,6 +17,15 @@ const ScrollToTop = () => {
 };
 
 const Mainpage = () => {
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	useEffect(() => {
+		if (location.pathname === "/") {
+			navigate("/home");
+		}
+	}, [location, navigate]);
+
 	return (
 		<div>
 			<ScrollToTop />
