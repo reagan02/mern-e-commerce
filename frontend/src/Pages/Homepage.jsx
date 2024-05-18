@@ -21,17 +21,6 @@ import {
 import Billboard1 from "../Components/Homepage/Billboard1";
 import FeaturesHighlight from "../Components/Homepage/FeaturesHighlight";
 const Homepage = () => {
-	const [data, setData] = useState([]); // Added state for data
-	useEffect(() => {
-		const fetchData = async () => {
-			const response = await axios.get(
-				"https://exclusive-mern.vercel.app/api/products/category?category=smartphone"
-			);
-			setData(response.data);
-		};
-		fetchData();
-	}, []); // Removed data from dependency array
-
 	return (
 		<div className="">
 			<CategoryNav />
