@@ -4,10 +4,10 @@ import Section1 from "../Components/Homepage/Section1";
 import Category from "../Components/Homepage/Category";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import PS4 from "../src/assests/PS4.png";
-import Women from "../src/assests/Women.png";
-import Speaker from "../src/assests/Speaker.png";
-import Perfume from "../src/assests/Perfume.png";
+import PS4 from "../assests/PS4.png";
+import Women from "../assests/Women.png";
+import Speaker from "../assests/Speaker.png";
+import Perfume from "../assests/Perfume.png";
 import "react-multi-carousel/lib/styles.css";
 
 import {
