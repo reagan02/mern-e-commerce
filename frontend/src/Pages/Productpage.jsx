@@ -30,7 +30,7 @@ const Productpage = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const response = await axios.get(
-				`https://exclusive-mern.vercel.app/api/products/${id}`
+				`https://deploy-ecommerce-frontend.vercel.app/api/products/${id}`
 			);
 			setData(response.data.product);
 		};
@@ -82,7 +82,7 @@ const Productpage = () => {
 	const handleCart = async () => {
 		try {
 			const res = await axios.post(
-				"https://exclusive-mern.vercel.app/api/cart/",
+				"https://deploy-ecommerce-frontend.vercel.app/api/cart/",
 				{
 					userID,
 					productData,

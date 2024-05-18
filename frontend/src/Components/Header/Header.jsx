@@ -9,7 +9,7 @@ const Header = () => {
 			{
 				try {
 					const response = await axios.get(
-						`https://exclusive-mern.vercel.app/api/accounts/${userID}`
+						`https://deploy-ecommerce-frontend.vercel.app/api/accounts/${userID}`
 					);
 					setUserName("Welcome " + response.data.account.userName);
 				} catch (error) {

@@ -26,7 +26,7 @@ const DisplayProducts = (props) => {
 			setLoading(true);
 			try {
 				const response = await axios.get(
-					`https://exclusive-mern.vercel.app/api/products/category?category=${category}`
+					`https://deploy-ecommerce-frontend.vercel.app/api/products/category?category=${category}`
 				);
 				setData(response.data);
 			} catch (error) {
