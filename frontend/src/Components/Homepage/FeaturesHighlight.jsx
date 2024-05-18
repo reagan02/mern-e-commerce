@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import Guarantee from "../assests/Guarantee.png";
+import Guarantee from "../../assests/Guarantee";
 const FeaturesHighlight = () => {
 	return (
 		<div className=" md:my-10 sm:flex sm:flex-wrap sm:justify-between md:justify-evenly ">
