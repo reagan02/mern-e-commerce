@@ -11,7 +11,7 @@ const app = express();
 const cors = require("cors");
 app.use(express.json());
 app.use(cors({
-  origin: "https://exclusive-api.vercel.app/", 
+  origin: "https://deploy-ecommerce-frontend.vercel.app", 
   methods: ['GET', 'POST'], 
   credentials: true,
 }));
