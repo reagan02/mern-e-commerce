@@ -11,7 +11,11 @@ const app = express();
 const cors = require("cors");
 app.use(express.json());
 app.use(cors(
-  
+  {
+    origin: "https://exclusive-ecommerce-gamma.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  }
 ));
 
 // express session
