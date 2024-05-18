@@ -14,8 +14,14 @@ const Section1 = (props) => {
 	const [isNext, setIsNext] = useState(null);
 
 	// Functions to handle arrow clicks whether to go next or previous
-	const handleNext = () => setIsNext(true);
-	const handlePrev = () => setIsNext(false);
+	const handleNext = () => {
+		setIsNext(true);
+		console.log("Next");
+	};
+	const handlePrev = () => {
+		setIsNext(false);
+		console.log("Prev");
+	};
 	return (
 		<Section1Context.Provider value={{ isNext, handleNext, handlePrev }}>
 			<div className="w-full xs:mt-7 md:mt-14">

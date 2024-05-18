@@ -1,6 +1,7 @@
+import BeatLoader from "react-spinners/ClipLoader";
 import Slider from "react-slick";
 import PropTypes from "prop-types";
-import Itemcard from "./Itemcard";
+import ItemCard from "./ItemCard";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect, useLayoutEffect } from "react";
 import axios from "axios";
@@ -13,16 +14,26 @@ const DisplayProducts = (props) => {
 	const navigate = useNavigate();
 	const category = props.productsCategory;
 	const { isNext } = useContext(Section1Context);
+	const [data, setData] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const color = "#000000";
+
 	const handleItemCard = (_id) => {
 		navigate(`/product/${_id}`);
 	};
-	const [data, setData] = useState([]);
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await axios.get(
-				`http://localhost:4000/api/products/category?category=${category}`
-			);
-			setData(response.data);
+			setLoading(true);
+			try {
+				const response = await axios.get(
+					`http://localhost:4000/api/products/category?category=${category}`
+				);
+				setData(response.data);
+			} catch (error) {
+				console.error("Error fetching data: ", error);
+			} finally {
+				setLoading(false);
+			}
 		};
 		fetchData();
 	}, [category]);
@@ -57,34 +68,58 @@ const DisplayProducts = (props) => {
 	const settings = {
 		dots: false,
 		infinite: false,
-		speed: 500,
+		speed: 100,
 		slidesToShow: 5,
 		slidesToScroll: 5,
 		initialSlide: 0,
 		swipe: isSwipeable,
 		responsive: [
 			{
+				breakpoint: 1200,
+				settings: {
+					slidesToShow: 4,
+					slidesToScroll: 4,
+					initialSlide: 0,
+				},
+			},
+			{
 				breakpoint: 1024,
+				settings: {
+					slidesToShow: 4,
+					slidesToScroll: 4,
+					initialSlide: 0,
+				},
+			},
+			{
+				breakpoint: 900,
 				settings: {
 					slidesToShow: 3,
 					slidesToScroll: 3,
-					infinite: true,
-					dots: false,
+					initialSlide: 0,
+				},
+			},
+			{
+				breakpoint: 767,
+				settings: {
+					slidesToShow: 5,
+					slidesToScroll: 5,
+					initialSlide: 0,
 				},
 			},
 			{
 				breakpoint: 600,
 				settings: {
-					slidesToShow: 2,
-					slidesToScroll: 2,
-					initialSlide: 2,
+					slidesToShow: 4,
+					slidesToScroll: 4,
+					initialSlide: 0,
 				},
 			},
 			{
-				breakpoint: 480,
+				breakpoint: 490,
 				settings: {
-					slidesToShow: 1,
-					slidesToScroll: 1,
+					slidesToShow: 3,
+					slidesToScroll: 3,
+					initialSlide: 0,
 				},
 			},
 		],
@@ -92,29 +127,35 @@ const DisplayProducts = (props) => {
 
 	return (
 		<div>
-			<Slider
-				ref={(slider) => {
-					sliderRef.current = slider;
-				}}
-				{...settings}
-				className="slider-container"
-			>
-				{data.map((item, index) => (
-					<button
-						key={index}
-						onClick={() => handleItemCard(item._id)}
-						className="text-left"
-					>
-						<Itemcard
-							image={item.images[0]}
-							name={item.name}
-							price={item.variants[0].price}
-							discount={item.discount}
-							rating={item.rating}
-						/>
-					</button>
-				))}
-			</Slider>
+			{loading ? (
+				<div className="text-center">
+					<BeatLoader color={color} loading={loading} size={200} margin={2} />
+				</div>
+			) : (
+				<Slider
+					ref={(slider) => {
+						sliderRef.current = slider;
+					}}
+					{...settings}
+					className="slider-container"
+				>
+					{data.map((item, index) => (
+						<button
+							key={index}
+							onClick={() => handleItemCard(item._id)}
+							className="text-left"
+						>
+							<ItemCard
+								image={item.images[0]}
+								name={item.name}
+								price={item.variants[0].price}
+								discount={item.discount}
+								rating={item.rating}
+							/>
+						</button>
+					))}
+				</Slider>
+			)}
 		</div>
 	);
 };
