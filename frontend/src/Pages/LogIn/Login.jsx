@@ -21,7 +21,7 @@ const Login = () => {
 		} else {
 			try {
 				const response = await axios.post(
-					"http://localhost:4000/api/accounts/login",
+					"https://exclusive-mern.vercel.app/api/accounts/login",
 					account
 				);
 				console.log(response.data); // { login: true }

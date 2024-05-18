@@ -72,13 +72,13 @@ const Checkout = () => {
 	const handlePlaceOrder = async () => {
 		try {
 			const response = await axios.patch(
-				`http://localhost:4000/api/accounts/${userID}`,
+				`https://exclusive-mern.vercel.app/api/accounts/${userID}`,
 				billingDetails
 			);
 			console.log(response.data);
 			if (location.state) {
 				const orderData = await axios.post(
-					"http://localhost:4000/api/orders/",
+					"https://exclusive-mern.vercel.app/api/orders/",
 					{
 						userID,
 						billingDetails,
@@ -98,7 +98,7 @@ const Checkout = () => {
 				}
 				setSubtotalPrice(totalProductsPrice);
 				const orderData = await axios.post(
-					"http://localhost:4000/api/orders/",
+					"https://exclusive-mern.vercel.app/api/orders/",
 					{
 						userID,
 						billingDetails,
@@ -119,7 +119,7 @@ const Checkout = () => {
 	useEffect(() => {
 		const fetchUser = async () => {
 			const responseUser = await axios.get(
-				`http://localhost:4000/api/accounts/${userID}`
+				`https://exclusive-mern.vercel.app/api/accounts/${userID}`
 			);
 			setBillingDetails(responseUser.data.account); // set the billing details
 		};
@@ -132,7 +132,7 @@ const Checkout = () => {
 			if (cartQuantity) {
 				setLocationState(false);
 				const response = await axios.get(
-					`http://localhost:4000/api/cart/user?userID=${userID}`
+					`https://exclusive-mern.vercel.app/api/cart/user?userID=${userID}`
 				);
 				setCartData(response.data.response);
 				const partialPrice = cartQuantity.products.reduce((total, product) => {
@@ -148,7 +148,7 @@ const Checkout = () => {
 				try {
 					const id = productID.current;
 					const responseProduct = await axios.get(
-						`http://localhost:4000/api/products/${id}`
+						`https://exclusive-mern.vercel.app/api/products/${id}`
 					);
 					setOrderItems([
 						{

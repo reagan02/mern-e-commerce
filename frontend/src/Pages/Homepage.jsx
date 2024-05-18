@@ -21,7 +21,7 @@ const Homepage = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const response = await axios.get(
-				"http://localhost:4000/api/products/category?category=smartphone"
+				"https://exclusive-mern.vercel.app/api/products/category?category=smartphone"
 			);
 			setData(response.data);
 		};

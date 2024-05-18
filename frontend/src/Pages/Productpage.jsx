@@ -30,7 +30,7 @@ const Productpage = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const response = await axios.get(
-				`http://localhost:4000/api/products/${id}`
+				`https://exclusive-mern.vercel.app/api/products/${id}`
 			);
 			setData(response.data.product);
 		};
@@ -81,10 +81,13 @@ const Productpage = () => {
 	// Add to Cart
 	const handleCart = async () => {
 		try {
-			const res = await axios.post("http://localhost:4000/api/cart/", {
-				userID,
-				productData,
-			});
+			const res = await axios.post(
+				"https://exclusive-mern.vercel.app/api/cart/",
+				{
+					userID,
+					productData,
+				}
+			);
 			alert(res.data.message);
 		} catch (error) {
 			console.log(error);
