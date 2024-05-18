@@ -21,7 +21,7 @@ import Wishlist from "./Pages/Wishlist";
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<Mainpage />}>
-			<Route index path="/home" element={<Homepage />} />
+			<Route path="/home" element={<Homepage />} />
 			<Route path="contact" element={<Contact />} />
 			<Route path="login" element={<Login />} />
 			<Route path="signup" element={<Signup />} />
