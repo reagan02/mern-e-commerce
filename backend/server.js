@@ -11,7 +11,7 @@ const app = express();
 const cors = require("cors");
 app.use(express.json());
 app.use(cors({
-  origin: 'https://exclusive-mern.vercel.app/', // or wherever you're making requests from
+  origin: "https://exclusive-mern.vercel.app/", // or wherever you're making requests from
   methods: ['GET', 'POST'], // or other HTTP methods you want to allow
   credentials: true, // if you need to send/receive cookies
 }));
