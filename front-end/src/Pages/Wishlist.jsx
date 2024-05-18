@@ -1,8 +1,6 @@
 import Button from "../Components/Homepage/Button";
 import ItemCard from "../Components/Homepage/ItemCard";
-import Section from "../Components/Homepage/Section";
-import Subtitle from "../Components/Homepage/Subtitle";
-import Title from "../Components/Homepage/Title";
+
 const Wishlist = () => {
 	return (
 		<div>
