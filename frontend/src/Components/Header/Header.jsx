@@ -4,9 +4,10 @@ const Header = () => {
 	const [userName, setUserName] = useState(null);
 
 	useEffect(() => {
-		const userID = sessionStorage.getItem("userID");
 		const fetchUsername = async () => {
-			{
+			const userID = sessionStorage.getItem("userID");
+
+			if (userID) {
 				try {
 					const response = await axios.get(
 						`https://exclusive-api.vercel.app/api/accounts/${userID}`
@@ -15,8 +16,11 @@ const Header = () => {
 				} catch (error) {
 					console.error(error);
 				}
+			} else {
+				console.error("userID is null");
 			}
 		};
+
 		fetchUsername();
 	}, []);
 	return (
