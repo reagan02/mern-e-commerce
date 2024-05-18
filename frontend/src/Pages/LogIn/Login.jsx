@@ -21,7 +21,7 @@ const Login = () => {
 		} else {
 			try {
 				const response = await axios.post(
-					"https://deploy-ecommerce-frontend.vercel.app/api/accounts/login",
+					"https://exclusive-api.vercel.app/api/accounts/login",
 					account
 				);
 				console.log(response.data); // { login: true }

@@ -31,7 +31,7 @@ const Signup = () => {
 
 			try {
 				const response = await axios.post(
-					"https://deploy-ecommerce-frontend.vercel.app/api/accounts",
+					"https://exclusive-api.vercel.app/api/accounts",
 					account
 				);
 				setUserName("");

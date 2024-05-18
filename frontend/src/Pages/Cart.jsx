@@ -61,7 +61,7 @@ const Cart = () => {
 				const productID = checkedCartItems[i]._id;
 				try {
 					await axios.delete(
-						`https://deploy-ecommerce-frontend.vercel.app/api/cart/${productID}?userID=${userID}`
+						`https://exclusive-api.vercel.app/api/cart/${productID}?userID=${userID}`
 					);
 					setCart((prev) => {
 						return {
@@ -118,7 +118,7 @@ const Cart = () => {
 			}
 			try {
 				const response = await axios.get(
-					`https://deploy-ecommerce-frontend.vercel.app/api/cart/user?userID=${userID}`
+					`https://exclusive-api.vercel.app/api/cart/user?userID=${userID}`
 				);
 				const cartData = response.data.response;
 				setCart(cartData);
@@ -135,7 +135,7 @@ const Cart = () => {
 					const stocksPromise = Promise.all(
 						cartData.products.map(async (product) => {
 							const response = await axios.get(
-								`https://deploy-ecommerce-frontend.vercel.app/api/cart/products/${product.productID}/variants/${product.variantIndex}`
+								`https://exclusive-api.vercel.app/api/cart/products/${product.productID}/variants/${product.variantIndex}`
 							);
 							return response.data.stock;
 						})

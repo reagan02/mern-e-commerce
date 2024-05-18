@@ -72,13 +72,13 @@ const Checkout = () => {
 	const handlePlaceOrder = async () => {
 		try {
 			const response = await axios.patch(
-				`https://deploy-ecommerce-frontend.vercel.app/api/accounts/${userID}`,
+				`https://exclusive-api.vercel.app/api/accounts/${userID}`,
 				billingDetails
 			);
 			console.log(response.data);
 			if (location.state) {
 				const orderData = await axios.post(
-					"https://deploy-ecommerce-frontend.vercel.app/api/orders/",
+					"https://exclusive-api.vercel.app/api/orders/",
 					{
 						userID,
 						billingDetails,
@@ -98,7 +98,7 @@ const Checkout = () => {
 				}
 				setSubtotalPrice(totalProductsPrice);
 				const orderData = await axios.post(
-					"https://deploy-ecommerce-frontend.vercel.app/api/orders/",
+					"https://exclusive-api.vercel.app/api/orders/",
 					{
 						userID,
 						billingDetails,
@@ -119,7 +119,7 @@ const Checkout = () => {
 	useEffect(() => {
 		const fetchUser = async () => {
 			const responseUser = await axios.get(
-				`https://deploy-ecommerce-frontend.vercel.app/api/accounts/${userID}`
+				`https://exclusive-api.vercel.app/api/accounts/${userID}`
 			);
 			setBillingDetails(responseUser.data.account); // set the billing details
 		};
@@ -132,7 +132,7 @@ const Checkout = () => {
 			if (cartQuantity) {
 				setLocationState(false);
 				const response = await axios.get(
-					`https://deploy-ecommerce-frontend.vercel.app/api/cart/user?userID=${userID}`
+					`https://exclusive-api.vercel.app/api/cart/user?userID=${userID}`
 				);
 				setCartData(response.data.response);
 				const partialPrice = cartQuantity.products.reduce((total, product) => {
@@ -148,7 +148,7 @@ const Checkout = () => {
 				try {
 					const id = productID.current;
 					const responseProduct = await axios.get(
-						`https://deploy-ecommerce-frontend.vercel.app/api/products/${id}`
+						`https://exclusive-api.vercel.app/api/products/${id}`
 					);
 					setOrderItems([
 						{
