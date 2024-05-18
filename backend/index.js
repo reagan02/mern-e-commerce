@@ -11,7 +11,7 @@ const app = express();
 const cors = require("cors");
 app.use(express.json());
 app.use(cors({
-  origin: "https://exclusive-mern.vercel.app", 
+  origin: "https://deploy-ecommerce-frontend.vercel.app", 
   methods: ['GET', 'POST'], 
   credentials: true,
 }));
@@ -25,13 +25,6 @@ app.use(
     cookie: { secure: false }, // Note: secure should be set to true when in a production environment and the site is served over HTTPS
   })
 );
-
-const corsOptions = {
-  origin: 'https://deploy-ecommerce-frontend.vercel.app',
-  optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
 
 
 //routes
