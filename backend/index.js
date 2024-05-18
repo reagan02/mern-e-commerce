@@ -26,11 +26,13 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
+const corsOptions = {
+  origin: 'https://deploy-ecommerce-frontend.vercel.app',
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+
 
 //routes
 app.use("/api/accounts", userRoutes);
