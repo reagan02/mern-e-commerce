@@ -1,32 +1,18 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useAuthContext } from "../../Pages/LogIn/authMethods/useAuthContext";
+
 const Header = () => {
-	const [userName, setUserName] = useState(null);
+	const {
+		state: { user },
+	} = useAuthContext();
 
-	useEffect(() => {
-		const fetchUsername = async () => {
-			const userID = sessionStorage.getItem("userID");
-
-			if (userID) {
-				try {
-					const response = await axios.get(
-						`https://exclusive-api.vercel.app/api/accounts/${userID}`
-					);
-					setUserName("Welcome " + response.data.account.userName);
-				} catch (error) {
-					console.error(error);
-				}
-			} else {
-				console.error("userID is null");
-			}
-		};
-
-		fetchUsername();
-	}, []);
 	return (
 		<div className="bg-black w-full flex xs:justify-center md:justify-between sm:items-center lg:py-2  md:py-2  xs:py-1 2xl:px-20 lg:px-18 md:px-14 xs:px-10 ">
 			<div className="text-white ">
-				<p className="lg:text-base sm:text-xs sm:block xs:hidden">{userName}</p>
+				{user && (
+					<p className="lg:text-base sm:text-xs sm:block xs:hidden">
+						{user.user.userName}
+					</p>
+				)}
 			</div>
 			<div className="text-white ">
 				<p className="lg:text-base sm:text-xs md:block hidden">

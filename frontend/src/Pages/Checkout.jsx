@@ -72,13 +72,13 @@ const Checkout = () => {
 	const handlePlaceOrder = async () => {
 		try {
 			const response = await axios.patch(
-				`https://exclusive-api.vercel.app/api/accounts/${userID}`,
+				`http://localhost:4000/api/accounts/${userID}`,
 				billingDetails
 			);
 			console.log(response.data);
 			if (location.state) {
 				const orderData = await axios.post(
-					"https://exclusive-api.vercel.app/api/orders/",
+					"http://localhost:4000/api/orders/",
 					{
 						userID,
 						billingDetails,
@@ -98,7 +98,7 @@ const Checkout = () => {
 				}
 				setSubtotalPrice(totalProductsPrice);
 				const orderData = await axios.post(
-					"https://exclusive-api.vercel.app/api/orders/",
+					"http://localhost:4000/api/orders/",
 					{
 						userID,
 						billingDetails,
@@ -119,7 +119,7 @@ const Checkout = () => {
 	useEffect(() => {
 		const fetchUser = async () => {
 			const responseUser = await axios.get(
-				`https://exclusive-api.vercel.app/api/accounts/${userID}`
+				`http://localhost:4000/api/accounts/${userID}`
 			);
 			setBillingDetails(responseUser.data.account); // set the billing details
 		};
@@ -132,7 +132,7 @@ const Checkout = () => {
 			if (cartQuantity) {
 				setLocationState(false);
 				const response = await axios.get(
-					`https://exclusive-api.vercel.app/api/cart/user?userID=${userID}`
+					`http://localhost:4000/api/cart/user?userID=${userID}`
 				);
 				setCartData(response.data.response);
 				const partialPrice = cartQuantity.products.reduce((total, product) => {
@@ -148,7 +148,7 @@ const Checkout = () => {
 				try {
 					const id = productID.current;
 					const responseProduct = await axios.get(
-						`https://exclusive-api.vercel.app/api/products/${id}`
+						`http://localhost:4000/api/products/${id}`
 					);
 					setOrderItems([
 						{

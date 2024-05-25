@@ -6,26 +6,14 @@ const userRoutes = require("./routes/userRoutes"); // import routes
 const productRoutes = require("./routes/productRoutes"); // import routes
 const orderRoutes = require("./routes/orderRoutes"); // import routes
 const cartRoutes = require("./routes/cartRoutes"); // import routes
+const cors = require("cors");
+
 // express app
 const app = express();
-const cors = require("cors");
-app.use(express.json());
-app.use(cors({
-  origin: ['https://deploy-ecommerce-frontend.vercel.app', 'http://localhost:5173'],
-  methods: ['GET', 'POST'], 
-  credentials: true,
-}));
-// app.use(cors());
-// express session
-app.use(
-  session({
-    secret: "reagan123",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }, // Note: secure should be set to true when in a production environment and the site is served over HTTPS
-  })
-);
 
+//middleware
+app.use(express.json());
+app.use(cors());
 
 //routes
 app.use("/api/accounts", userRoutes);
@@ -35,24 +23,24 @@ app.use("/api/cart", cartRoutes);
 
 //Database Connection with mongoDB
 mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    //listen for request
-    app.listen(process.env.PORT, (error) => {
-      if (!error) {
-        console.log(
-          "Server is connected to mongo db & running on port",
-          process.env.PORT
-        );
-      } else {
-        console.log(`Error ${error}`);
-      }
-    });
-  })
-  .catch((error) => console.log(error));
+	.connect(process.env.MONGO_URI)
+	.then(() => {
+		//listen for request
+		app.listen(process.env.PORT, (error) => {
+			if (!error) {
+				console.log(
+					"Server is connected to mongo db & running on port",
+					process.env.PORT
+				);
+			} else {
+				console.log(`Error ${error}`);
+			}
+		});
+	})
+	.catch((error) => console.log(error));
 
-// middleware
+// test route
 app.get("/", (req, res) => {
-  res.send("Express is running");
-  console.log("Express is running");
+	res.send("Express is running");
+	console.log("Express is running");
 });
