@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom/client";
+import React from "react";
 import "./index.css";
 import {
 	Route,
@@ -6,32 +7,76 @@ import {
 	createBrowserRouter,
 	createRoutesFromElements,
 } from "react-router-dom";
-import Mainpage from "./Pages/Mainpage";
+import AuthContextProvider from "./Context/Authentication/AuthContextProvider";
+import LoadingSpinner from "./LoadingDisplay/LoadingSpinner";
+
 import Homepage from "./Pages/Homepage";
 import Contact from "./Pages/Contact";
-import Login from "./Pages/LogIn/Login";
+import Login from "./Pages/Authentication/Login";
 import About from "./Pages/About";
 import Cart from "./Pages/Cart";
 import NotFound from "./Pages/NotFound";
-import Checkout from "./Pages/Checkout";
+import Checkout from "./Pages/Checkout/Checkout";
 import Productpage from "./Pages/Productpage";
 import Wishlist from "./Pages/Wishlist";
-import React from "react";
-import AuthContextProvider from "./context/AuthContext";
-import SignUp from "./Pages/LogIn/SignUp";
+import SignUp from "./Pages/Authentication/SignUp";
+import App from "./App";
+
 const router = createBrowserRouter(
 	createRoutesFromElements(
-		<Route path="/" element={<Mainpage />}>
-			<Route path="/home" element={<Homepage />} />
+		<Route path="/" element={<App />}>
+			<Route
+				path="/home"
+				element={
+					<React.Suspense fallback={<LoadingSpinner />}>
+						<Homepage />
+					</React.Suspense>
+				}
+			/>
 			<Route path="contact" element={<Contact />} />
 			<Route path="login" element={<Login />} />
 			<Route path="signup" element={<SignUp />} />
 			<Route path="about" element={<About />} />
-			<Route path="cart" element={<Cart />} />
-			<Route path="checkout" element={<Checkout />} />
-			<Route path="product/:id" element={<Productpage />} />
-			<Route path="wishlist" element={<Wishlist />} />
-			<Route path="*" element={<NotFound />} />
+			<Route
+				path="cart"
+				element={
+					<React.Suspense fallback={<LoadingSpinner />}>
+						<Cart />
+					</React.Suspense>
+				}
+			/>
+			<Route
+				path="checkout"
+				element={
+					<React.Suspense fallback={<LoadingSpinner />}>
+						<Checkout />
+					</React.Suspense>
+				}
+			/>
+			<Route
+				path="product/:id"
+				element={
+					<React.Suspense fallback={<LoadingSpinner />}>
+						<Productpage />
+					</React.Suspense>
+				}
+			/>
+			<Route
+				path="wishlist"
+				element={
+					<React.Suspense fallback={<LoadingSpinner />}>
+						<Wishlist />
+					</React.Suspense>
+				}
+			/>
+			<Route
+				path="*"
+				element={
+					<React.Suspense fallback={<LoadingSpinner />}>
+						<NotFound />
+					</React.Suspense>
+				}
+			/>
 		</Route>
 	)
 );

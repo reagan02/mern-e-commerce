@@ -1,5 +1,5 @@
-import icons_phone from "../assests/icons_phone.png";
-import icons_mail from "../assests/icons_mail.png";
+import icons_phone from "../assets/icons_phone.png";
+import icons_mail from "../assets/icons_mail.png";
 import PropTypes from "prop-types";
 
 const Contact = () => {

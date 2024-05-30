@@ -1,11 +1,11 @@
-import Services from "../assests/Services.png";
-import Bag from "../assests/Services_Bag.png";
-import Money from "../assests/about_money.png";
-import sideImage from "../assests/Side Image.png";
+import Services from "../assets/Services.png";
+import Bag from "../assets/Services_Bag.png";
+import Money from "../assets/about_money.png";
+import sideImage from "../assets/Side Image.png";
 import PropTypes from "prop-types";
-import Person1 from "../assests/person1.png";
-import Person2 from "../assests/person2.png";
-import Person3 from "../assests/person3.png";
+import Person1 from "../assets/person1.png";
+import Person2 from "../assets/person2.png";
+import Person3 from "../assets/person3.png";
 import FeaturesHighlight from "../Components/Homepage/FeaturesHighlight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

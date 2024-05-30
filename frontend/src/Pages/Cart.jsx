@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import "./Cart.css";
 
 const Cart = () => {
 	const [cart, setCart] = useState({ id: "", userID: "", products: [] });

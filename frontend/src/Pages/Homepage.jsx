@@ -2,12 +2,10 @@ import CategoryNav from "../Components/Navbar/CategoryNav";
 import Section from "../Components/Homepage/Section";
 import Section1 from "../Components/Homepage/Section1";
 import Category from "../Components/Homepage/Category";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import PS4 from "../assests/PS4.png";
-import Women from "../assests/Women.png";
-import Speaker from "../assests/Speaker.png";
-import Perfume from "../assests/Perfume.png";
+import PS4 from "../assets/PS4.png";
+import Women from "../assets/Women.png";
+import Speaker from "../assets/Speaker.png";
+import Perfume from "../assets/Perfume.png";
 import "react-multi-carousel/lib/styles.css";
 
 import {
@@ -20,22 +18,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Billboard1 from "../Components/Homepage/Billboard1";
 import FeaturesHighlight from "../Components/Homepage/FeaturesHighlight";
+import FlashSales from "../Components/Homepage/FlashSales";
+
 const Homepage = () => {
 	return (
 		<div className="">
 			<CategoryNav />
+			{/* <FlashSales /> */}
 
-			{/* Flash Sales Section */}
-			<Section1
+			<FlashSales />
+			{/* <Section1
 				subtitle={"Today's"}
 				title={"Flash Sales"}
 				countdown={true}
 				productsCategory={"Electronics"}
 				arrowOrButton={true}
-			/>
-			{/* PS: Always check the section props to avoid confusion of the propsTypes used */}
+			/> */}
+			{/*
 			<hr className="" />
-			{/* Categories */}
+			
 			<Section
 				subtitle="Categories"
 				title="Browse By Category"
@@ -51,7 +52,7 @@ const Homepage = () => {
 				}
 			/>
 			<hr className="xs:mt-7 md:mt-14" />
-			{/* Best Selling Products */}
+		
 			<Section1
 				subtitle="This Month"
 				title="Best Selling Products"
@@ -59,11 +60,11 @@ const Homepage = () => {
 			/>
 			<hr />
 			<Billboard1 />
-			{/* Explore our products Section */}
+
 			<Section1
 				subtitle="Our Products"
 				title="Explore Our Products"
-				arrowOrButton={true} // set true for arrowButton and false for viewButton
+				arrowOrButton={true} 
 				productsCategory="Electronics"
 			/>
 			<Section
@@ -85,7 +86,7 @@ const Homepage = () => {
 						</div>
 					</div>
 				}
-			/>
+			/> */}
 			<FeaturesHighlight />
 		</div>
 	);

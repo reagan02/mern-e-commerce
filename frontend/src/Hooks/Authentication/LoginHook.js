@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { useAuthContext } from "./useAuthContext";
+import { UseAuthContext } from "./UseAuthContext";
 import axios from "axios";
-export const useSignUp = () => {
-	const [error, setError] = useState(null);
-	const { dispatch } = useAuthContext();
 
-	const signUp = async (account) => {
+export const LoginHook = () => {
+	const [error, setError] = useState(null);
+	const { dispatch } = UseAuthContext();
+	const login = async (account) => {
 		setError(null);
+
 		try {
 			const response = await axios.post(
-				"http://localhost:4000/api/accounts/signup",
+				"http://localhost:4000/api/accounts/login",
 				account, // data
 				{
 					headers: { "Content-Type": "application/json" },
@@ -28,9 +29,8 @@ export const useSignUp = () => {
 			return false;
 		}
 	};
-	return { signUp, error };
+	return { login, error };
 };
-
 // Helper function to extract error message
 const getErrorMessage = (error) => {
 	if (error.response && error.response.data && error.response.data.error) {

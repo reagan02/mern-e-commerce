@@ -1,5 +1,5 @@
 import { useAuthContext } from "../authContext";
-export const useLogOut = () => {
+export const LogoutHook = () => {
 	const { dispatch } = useAuthContext();
 	const logout = () => {
 		dispatch({

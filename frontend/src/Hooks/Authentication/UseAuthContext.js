@@ -1,7 +1,7 @@
-import { AuthContext } from "../../../context/authReducer";
+import { AuthContext } from "./../../Context/Authentication/AuthContext";
 import { useContext } from "react";
 
-export const useAuthContext = () => {
+export const UseAuthContext = () => {
 	const context = useContext(AuthContext);
 	if (!context) {
 		throw new Error(

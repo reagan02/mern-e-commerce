@@ -1,6 +1,6 @@
-import InputDetails from "../Components/Checkout/InputDetails";
+import InputDetails from "../../Components/Checkout/InputDetails";
 import { useEffect, useState, useRef } from "react";
-import ItemList from "../Components/Checkout/ItemList";
+import ItemList from "../../Components/Checkout/ItemList";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import PropTypes from "prop-types";

@@ -1,9 +1,9 @@
-import { useAuthContext } from "../../Pages/LogIn/authMethods/useAuthContext";
+import { UseAuthContext } from "../../Hooks/Authentication/UseAuthContext";
 
 const Header = () => {
 	const {
 		state: { user },
-	} = useAuthContext();
+	} = UseAuthContext();
 
 	return (
 		<div className="bg-black w-full flex xs:justify-center md:justify-between sm:items-center lg:py-2  md:py-2  xs:py-1 2xl:px-20 lg:px-18 md:px-14 xs:px-10 ">

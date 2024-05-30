@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { AuthContext, authReducer } from "./authReducer";
+import { AuthContext, authReducer } from "./AuthContext";
 import PropTypes from "prop-types";
 
 const AuthContextProvider = ({ children }) => {
