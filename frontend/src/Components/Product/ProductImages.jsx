@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Slider from "react-slick";
-import PropTypes from "prop-types";
+import { ProductContext } from "../../Context/BuyProduct/ProductContext";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const ProductImages = (props) => {
-	const data = props.data;
+const ProductImages = () => {
+	const { productData } = useContext(ProductContext);
 	const [imageIndex, setImageIndex] = useState(0);
 
 	const settings = {
@@ -21,10 +21,10 @@ const ProductImages = (props) => {
 			<div className="flex flex-col-reverse xl:flex-row lg:gap-10 xl:gap-20">
 				{/* Small Images */}
 				<div className="hidden lg:flex xl:flex-col gap-5 h-full">
-					{data && // if product data exist
-						data.images && // if the product images exist
+					{productData && // if product data exist
+						productData.images && // if the product images exist
 						// map images
-						data.images.slice(0, 4).map((image, index) => (
+						productData.images.slice(0, 4).map((image, index) => (
 							<button
 								key={index}
 								// if image index is equal to index, set border to orange
@@ -44,9 +44,9 @@ const ProductImages = (props) => {
 				{/* Big Image */}
 
 				<button className=" hidden lg:block md:h-[430px] md:w-full lg:h-[490px] lg:w-[520px] xl:h-[568px] xl:w-[600px] rounded-md ">
-					{data && data.images && (
+					{productData && productData.images && (
 						<img
-							src={data.images[imageIndex]}
+							src={productData.images[imageIndex]}
 							alt=""
 							className="object-cover "
 						/>
@@ -55,9 +55,9 @@ const ProductImages = (props) => {
 				{/* Slider */}
 				<div className=" lg:hidden slider-container">
 					<Slider {...settings}>
-						{data &&
-							data.images &&
-							data.images.map((image, index) => (
+						{productData &&
+							productData.images &&
+							productData.images.map((image, index) => (
 								<button
 									key={index}
 									// if image index is equal to index, set border to orange
@@ -77,6 +77,3 @@ const ProductImages = (props) => {
 };
 
 export default ProductImages;
-ProductImages.propTypes = {
-	data: PropTypes.object.isRequired,
-};

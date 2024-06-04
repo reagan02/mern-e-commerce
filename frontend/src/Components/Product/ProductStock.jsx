@@ -1,11 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
-const ProductStock = (props) => {
-	const { data, variantIndex } = props;
+import { useContext } from "react";
+import { ProductContext } from "../../Context/BuyProduct/ProductContext";
+
+const ProductStock = () => {
+	const { productData, variantIndex } = useContext(ProductContext);
+
 	return (
 		<div className="flex justify-start py-3 tracking-widest ">
 			<p className="text-sm md:text-base">
-				{data && data.variants && data.variants[variantIndex].stock}
+				{productData &&
+					productData.variants &&
+					productData.variants[variantIndex].stock}
 			</p>
 			<p className="text-sm md:text-base"> |</p>
 			<p className="text-sm md:text-base"> In Stock</p>
@@ -14,8 +18,3 @@ const ProductStock = (props) => {
 };
 
 export default ProductStock;
-
-ProductStock.propTypes = {
-	data: PropTypes.object.isRequired,
-	variantIndex: PropTypes.number.isRequired,
-};

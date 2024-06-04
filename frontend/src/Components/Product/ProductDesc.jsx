@@ -1,17 +1,13 @@
-import React from "react";
-import PropTypes from "prop-types";
-const ProductDesc = (props) => {
-	const data = props.data;
+import { ProductContext } from "../../Context/BuyProduct/ProductContext";
+import { useContext } from "react";
+const ProductDesc = () => {
+	const { productData } = useContext(ProductContext);
 	return (
 		<p className="py-5 md:text-base text-sm">
 			{/* Desciprtion */}
-			{data && data.description}
+			{productData && productData.description}
 		</p>
 	);
 };
 
 export default ProductDesc;
-
-ProductDesc.propTypes = {
-	data: PropTypes.object.isRequired,
-};

@@ -1,18 +1,23 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { ProductContext } from "../../Context/BuyProduct/ProductContext";
 import PropTypes from "prop-types";
 const ColorsOrVariants = (props) => {
-	const { data, name } = props;
-	const [variantIndex, setVariantIndex] = useState(0); // color
-	const [colorIndex, setColorIndex] = useState(0); // size
-
+	const {
+		productData,
+		variantIndex,
+		setVariantIndex,
+		colorIndex,
+		setColorIndex,
+		setQuantity,
+	} = useContext(ProductContext);
 	return (
 		<div className="flex py-3 items-center ">
-			<p className="text-base md:text-lg xl:text-xl"> Colors:</p>
+			<p className="text-base md:text-lg xl:text-xl">{props.name}:</p>
 			<div className="flex flex-wrap gap-2 pl-2">
-				{name === "Colors" &&
-					data &&
-					data.color &&
-					data.color.map((color, index) => (
+				{props.name === "Colors" &&
+					productData &&
+					productData.color &&
+					productData.color.map((color, index) => (
 						<button
 							key={index}
 							className={`border-2  ${
@@ -25,10 +30,10 @@ const ColorsOrVariants = (props) => {
 							{color}
 						</button>
 					))}
-				{name === "Sizes" &&
-					data &&
-					data.variants &&
-					data.variants.map((variant, index) => (
+				{props.name === "Sizes" &&
+					productData &&
+					productData.variants &&
+					productData.variants.map((variant, index) => (
 						<button
 							key={index}
 							className={`border-2  ${
@@ -36,6 +41,7 @@ const ColorsOrVariants = (props) => {
 							} px-2 md:px-3 py-1 md:text-base text-sm rounded-md`}
 							onClick={() => {
 								setVariantIndex(index);
+								setQuantity(1);
 							}}
 						>
 							{variant.size}
@@ -45,10 +51,8 @@ const ColorsOrVariants = (props) => {
 		</div>
 	);
 };
+ColorsOrVariants.propTypes = {
+	name: PropTypes.string,
+};
 
 export default ColorsOrVariants;
-
-ColorsOrVariants.propTypes = {
-	data: PropTypes.object.isRequired,
-	name: PropTypes.string.isRequired,
-};

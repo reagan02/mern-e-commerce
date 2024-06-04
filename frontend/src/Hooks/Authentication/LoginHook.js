@@ -9,6 +9,7 @@ export const LoginHook = () => {
 		setError(null);
 
 		try {
+			console.log("Logging in:", account);
 			const response = await axios.post(
 				"http://localhost:4000/api/accounts/login",
 				account, // data
@@ -26,6 +27,7 @@ export const LoginHook = () => {
 			return true;
 		} catch (error) {
 			setError(getErrorMessage(error));
+			console.log("Login failed:", error);
 			return false;
 		}
 	};

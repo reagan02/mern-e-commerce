@@ -24,7 +24,8 @@ const Login = () => {
 				alert("Logged in successfully");
 			}
 		} catch (error) {
-			console.error(error);
+			console.log("Error logging in", error);
+			console.error("why");
 		}
 	};
 	return (

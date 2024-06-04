@@ -21,6 +21,8 @@ import Productpage from "./Pages/Productpage";
 import Wishlist from "./Pages/Wishlist";
 import SignUp from "./Pages/Authentication/SignUp";
 import App from "./App";
+import ProductProvider from "./Context/BuyProduct/ProductProvider";
+import CheckoutProvider from "./Context/Checkout/CheckoutProvider";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -49,7 +51,9 @@ const router = createBrowserRouter(
 				path="checkout"
 				element={
 					<React.Suspense fallback={<LoadingSpinner />}>
-						<Checkout />
+						<CheckoutProvider>
+							<Checkout />
+						</CheckoutProvider>
 					</React.Suspense>
 				}
 			/>
@@ -57,7 +61,9 @@ const router = createBrowserRouter(
 				path="product/:id"
 				element={
 					<React.Suspense fallback={<LoadingSpinner />}>
-						<Productpage />
+						<ProductProvider>
+							<Productpage />
+						</ProductProvider>
 					</React.Suspense>
 				}
 			/>
