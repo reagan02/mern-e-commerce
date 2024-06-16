@@ -21,7 +21,6 @@ const Productpage = () => {
 	const [loading, setLoading] = useState(false);
 	const { id } = useParams(); // id
 	const navigate = useNavigate();
-
 	// Fetch Product Data
 	useEffect(() => {
 		const fetchData = async () => {
@@ -86,7 +85,7 @@ const Productpage = () => {
 
 								{/* CheckOut */}
 								<BuyButton />
-								{/* <CartButton /> */}
+								<CartButton />
 							</div>
 							{/* <DeliveryBox /> */}
 						</div>

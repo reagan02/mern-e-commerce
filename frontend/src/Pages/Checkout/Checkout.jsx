@@ -11,8 +11,6 @@ const Checkout = () => {
 	const location = useLocation();
 	const { orders, fromCart } = location.state;
 	const { setOrderData } = useContext(CheckoutContext);
-	console.log("Checkout", orders);
-	console.log("Checkout", fromCart);
 	useEffect(() => {
 		setOrderData(orders);
 	}, [orders]);
@@ -26,10 +24,12 @@ const Checkout = () => {
 						link: "",
 						text: "Account",
 					},
-					{
-						link: `/product/${orders.productID}`,
-						text: orders.productName,
-					},
+					fromCart
+						? { link: "/cart", text: "Cart" }
+						: {
+								link: `/product/${orders.productID}`,
+								text: orders.productName,
+						  },
 					{
 						link: "",
 						text: "Checkout",

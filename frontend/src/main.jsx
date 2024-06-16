@@ -23,7 +23,7 @@ import SignUp from "./Pages/Authentication/SignUp";
 import App from "./App";
 import ProductProvider from "./Context/BuyProduct/ProductProvider";
 import CheckoutProvider from "./Context/Checkout/CheckoutProvider";
-
+import CartProvider from "./Context/Cart/CartProvider";
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<App />}>
@@ -42,9 +42,9 @@ const router = createBrowserRouter(
 			<Route
 				path="cart"
 				element={
-					<React.Suspense fallback={<LoadingSpinner />}>
+					<CartProvider>
 						<Cart />
-					</React.Suspense>
+					</CartProvider>
 				}
 			/>
 			<Route

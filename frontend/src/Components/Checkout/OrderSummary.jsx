@@ -9,11 +9,22 @@ import { useContext, useEffect } from "react";
 const OrderSummary = ({ orders, fromCart }) => {
 	const { subTotal, setSubTotal, totalPrice, setTotalPrice } =
 		useContext(CheckoutContext);
-	console.log(orders);
 	useEffect(() => {
-		setSubTotal(orders.price);
-		setTotalPrice(orders.price + 100);
+		if (fromCart) {
+			let total = 0;
+			orders.forEach((order) => {
+				total += order.price * order.quantity;
+			});
+			setSubTotal(total);
+			setTotalPrice(total + 100);
+
+			return;
+		} else {
+			setSubTotal(orders.price * orders.quantity);
+			setTotalPrice(orders.price * orders.quantity + 100);
+		}
 	}, [orders]);
+
 	return (
 		<div className="h-auto mt-10 lg:mt-8">
 			<div className=" xl:mr-20 ">
@@ -47,16 +58,16 @@ const OrderSummary = ({ orders, fromCart }) => {
 							<hr className=" my-3 border border-black" />
 							<OrderLabel name="Shipping" value={100} />
 							<hr className=" my-3 border border-black" />
-							<OrderLabel name="Total" value={orders.price + 100} />
+							<OrderLabel name="Total" value={totalPrice} />
 							<PaymentMode />
 						</div>
 					) : (
 						<div>
-							<OrderLabel name="Subtotal" value={orders.price} />
+							<OrderLabel name="Subtotal" value={subTotal} />
 							<hr className=" my-3 border border-black" />
 							<OrderLabel name="Shipping" value={100} />
 							<hr className=" my-3 border border-black" />
-							<OrderLabel name="Total" value={totalPrice + 100} />
+							<OrderLabel name="Total" value={totalPrice} />
 							<PaymentMode />
 						</div>
 					)}
@@ -71,8 +82,7 @@ const OrderSummary = ({ orders, fromCart }) => {
 };
 
 OrderSummary.propTypes = {
-	orders: PropTypes.array.isRequired,
+	orders: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
 	fromCart: PropTypes.bool.isRequired,
 };
-
 export default OrderSummary;

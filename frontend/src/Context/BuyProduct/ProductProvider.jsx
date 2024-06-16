@@ -25,6 +25,8 @@ const ProductProvider = ({ children }) => {
 			variantIndex: variantIndex,
 			quantity: quantity,
 			image: productData && productData.images && productData.images[0],
+			subtotal:
+				productData && productData.variants[variantIndex].price * quantity,
 		}),
 		[productData, variantIndex, colorIndex, quantity]
 	);

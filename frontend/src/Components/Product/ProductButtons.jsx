@@ -3,6 +3,8 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ProductContext } from "../../Context/BuyProduct/ProductContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UseAuthContext } from "../../Hooks/Authentication/UseAuthContext";
 
 export const BuyButton = () => {
 	const { orders } = useContext(ProductContext);
@@ -26,8 +28,26 @@ export const BuyButton = () => {
 };
 
 export const CartButton = () => {
+	const {
+		state: { user },
+	} = UseAuthContext();
+	const { orders } = useContext(ProductContext);
+
+	const addToCart = async () => {
+		try {
+			await axios.post("http://localhost:4000/api/cart", {
+				userID: user.user._id,
+				productData: orders,
+			});
+
+			alert("Added to cart successfully");
+		} catch (error) {
+			console.log(error);
+			alert("Error adding to cart");
+		}
+	};
 	return (
-		<button className="border-2 rounded-md md:py-1 px-2 ">
+		<button className="border-2 rounded-md md:py-1 px-2 " onClick={addToCart}>
 			<FontAwesomeIcon
 				icon={faCartShopping}
 				className="size-6 md:size-7 xl:size-8"

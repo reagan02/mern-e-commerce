@@ -4,7 +4,7 @@ import { useContext } from "react";
 const CheckoutButton = ({ title }) => {
 	const { orderSummary } = useContext(CheckoutContext);
 	const handlePlaceOrder = () => {
-		console.log("Order summary", orderSummary);
+		console.log(orderSummary);
 	};
 	return (
 		<button

@@ -14,6 +14,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import "./Navbar.css";
+import DropdownMenu from "./DropwDownMenu";
 
 const Navbar = () => {
 	const [click, setClick] = useState(false);
@@ -100,6 +101,7 @@ const Navbar = () => {
 					</li>
 				</ul>
 			</nav>
+
 			<div className="flex items-end justify-end h-10 gap-7">
 				{/*  Search Bar */}
 				<div className="justify-between bg-gray-200 px-3 items-center rounded-sm hidden lg:inline-block ">
@@ -127,11 +129,13 @@ const Navbar = () => {
 						className="size-5 hidden 2xl:block"
 					/>
 
+					<DropdownMenu />
+
 					{/* Account */}
-					<div>
+					{/* <div>
 						<button onClick={handleSubmit}>
 							<FontAwesomeIcon icon={faCircleUser} className="size-5" />{" "}
-							{/* Account Icon */}
+						
 						</button>
 						{click &&
 							(isUserLoggedIn ? (
@@ -145,7 +149,7 @@ const Navbar = () => {
 									<button onClick={handleMyCart}>
 										<div className="my-3 px-5 flex items-center gap-4">
 											<FontAwesomeIcon icon={faCircleUser} className="size-5" />{" "}
-											{/* Cart Icon */}
+											
 											<p className="text-base">My Cart</p>
 										</div>
 									</button>
@@ -155,7 +159,7 @@ const Navbar = () => {
 												icon={faBagShopping}
 												className="size-5"
 											/>
-											<p className="text-base">My Order</p> {/* Order Icon */}
+											<p className="text-base">My Order</p> 
 										</div>
 									</a>
 									<a href="" className="">
@@ -165,14 +169,14 @@ const Navbar = () => {
 												className="size-5"
 											/>
 											<p className="text-base">My Cancellations</p>{" "}
-											{/* Cancel Icon */}
+										
 										</div>
 									</a>
 									<a href="" className="">
 										<div className="my-3 px-5 flex items-center gap-4">
 											<FontAwesomeIcon icon={faStar} className="size-5" />
 											<p className="text-base">My Reviews</p>{" "}
-											{/* Review Icon */}
+											
 										</div>
 									</a>
 									<button onClick={handleLogout}>
@@ -193,13 +197,13 @@ const Navbar = () => {
 												icon={faArrowRightFromBracket}
 												className="size-5"
 											/>{" "}
-											{/* Login Icon */}
+										
 											<p className="text-base">Login</p>
 										</div>
 									</button>
 								</div>
 							))}
-					</div>
+					</div> */}
 				</div>
 			</div>
 		</div>

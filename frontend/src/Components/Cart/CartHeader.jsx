@@ -1,0 +1,26 @@
+import { useContext } from "react";
+import { CartContext } from "../../Context/Cart/CartContext";
+const CartHeader = () => {
+	const { setCart, isClicked } = useContext(CartContext);
+	const handleUpdate = () => {
+		setCart((prev) => {
+			const newCart = prev.map((product) => {
+				return { ...product, checkbox: !product.checkbox };
+			});
+			return newCart;
+		});
+	};
+	return (
+		<div className="flex">
+			{isClicked && <input type="checkbox" onChange={handleUpdate} />}
+			<div className="grid md:grid-cols-5 lg:grid-cols-4 text-base lg:text-lg xl:text-xl px-3 lg:px-5  py-3 lg:py-4  border-2 shadow-md rounded-md w-full">
+				<p className="text-left md:col-span-2 lg:col-span-1 border">Product</p>
+				<p className="text-center border">Price</p>
+				<p className="text-center border">Quantity</p>
+				<p className="text-right border">Subtotal</p>
+			</div>
+		</div>
+	);
+};
+
+export default CartHeader;
