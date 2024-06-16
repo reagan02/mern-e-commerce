@@ -44,22 +44,18 @@ const CartList = ({ index, stock, name, image, price, quantity }) => {
 			{isClicked && (
 				<input
 					type="checkbox"
-					className="border border-black"
 					checked={cart[index].checkbox}
 					onChange={(event) => handleCheck(event, index)}
 				/>
 			)}
-			<div className="items-center md:grid md:grid-cols-5 lg:grid-cols-4 px-3 lg:px-5 hidden w-full border border-black">
+			<div className="items-center grid grid-cols-3 lg:grid-cols-4 lg:px-5 w-full  ">
 				{/* Image */}
-				<div
-					className=" flex items-center md:col-span
-      -2 lg:col-span-1 border"
-				>
-					<img src={image} alt="" className="border-2 size-16" />
+				<div className=" flex flex-col md:flex-row items-center lg:gap-0 gap-3 ">
+					<img src={image} alt="" className="size-12 md:size-16" />
 					<p>{name}</p>
 				</div>
 				{/* Price */}
-				<p className="text-center border text-lg ">
+				<p className="text-center text-lg ">
 					&#8369;
 					{price ? price.toLocaleString() : "0"}
 				</p>
@@ -92,7 +88,7 @@ const CartList = ({ index, stock, name, image, price, quantity }) => {
 				</div>
 
 				{/* Subtotal */}
-				<p className="border text-right  text-lg">
+				<p className=" text-right text-lg hidden lg:block">
 					&#8369;
 					{price && quantity ? (price * quantity).toLocaleString() : "0"}
 				</p>

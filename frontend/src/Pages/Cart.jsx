@@ -50,7 +50,7 @@ const Cart = () => {
 					},
 				]}
 			/>
-			<div className="hidden lg:flex flex-col gap-5 xs:my-6 sm:my-8 md:my-10 lg:my-12 ">
+			<div className="flex flex-col gap-5 xs:my-6 sm:my-8 md:my-10 lg:my-12 ">
 				<CartHeader />
 
 				{Array.isArray(cart) && cart.length > 0 ? (

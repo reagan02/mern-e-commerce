@@ -40,7 +40,7 @@ const BillingDetails = () => {
 	console.log("Timer:", timer, "milliseconds");
 
 	return (
-		<div className="border border-black">
+		<div>
 			<InputDetails
 				title="First Name"
 				value={userDetails && userDetails.firstName}

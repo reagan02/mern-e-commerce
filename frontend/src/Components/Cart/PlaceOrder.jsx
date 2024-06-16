@@ -6,9 +6,9 @@ const PlaceOrder = () => {
 	const SHIPPING_FEE = 100;
 	const { totalPrice } = useContext(CartContext);
 	return (
-		<div className="flex md:justify-between flex-col gap-3 md:flex-row  py-5 lg:py-8 ">
+		<div className="flex md:justify-between flex-col gap-3 md:flex-row  py-5 lg:py-8 mt-5">
 			{/* coupon and proceed to checkout */}
-			<div className="flex justify-between gap-3 md:flex-wrap md:justify-normal flex-nowrap md:h-24">
+			<div className="flex justify-between gap-3 md:flex-wrap md:justify-normal flex-nowrap md:h-24 h-12">
 				<input
 					type="text"
 					placeholder="Coupon Code"

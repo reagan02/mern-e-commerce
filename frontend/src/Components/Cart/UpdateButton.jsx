@@ -49,8 +49,10 @@ const UpdateButton = () => {
 		deleteProducts();
 	};
 	return (
-		<div className="hidden md:flex justify-between">
-			<button className="border border-black w-52 py-4">Return To Shop</button>
+		<div className="flex justify-between mt-14">
+			<button className="border border-black w-52 py-4 md:block hidden">
+				Return To Shop
+			</button>
 			<div className="flex gap-5 ">
 				{isClicked && (
 					<button

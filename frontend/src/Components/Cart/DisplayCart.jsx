@@ -39,7 +39,7 @@ const DisplayCart = () => {
 					<LoadingSpinner />
 				</div>
 			) : (
-				<div className=" max-h-[500px] overflow-auto flex flex-col gap-5">
+				<div className=" max-h-[500px] overflow-auto flex flex-col gap-10">
 					{cart &&
 						cart.map((product, index) => (
 							<div key={`${product.productID}-${index}`}>
